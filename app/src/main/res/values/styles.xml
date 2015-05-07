@@ -5,4 +5,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CustomButton">
+
+    </style>
+
+    <style name="CustomEditText">
+
+    </style>
+
+    <style name="CustomTextView">
+
+    </style>
+
 </resources>

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Interactive Story Editor</string>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="title_activity_add_story">AddStoryActivity</string>
+    <string name="title_activity_add_chapter">AddChapterActivity</string>
+    <string name="title_activity_add_gps_interaction">AddGPSInteractionActivity</string>
+    <string name="title_activity_add_nfc_interaction">AddNFCInteractionActivity</string>
+    <string name="title_activity_add_qr_code_interaction">AddQRCodeInteractionActivity</string>
+    <string name="title_activity_add_quiz_interaction">AddQuizInteractionActivity</string>
+    <string name="title_activity_add_spell_check_interaction">AddSpellCheckInteractionActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

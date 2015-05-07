@@ -1,9 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fi.oulu.interactivestoryeditor">
+    package="fi.oulu.interactivestoryeditor" >
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
-
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainMenuActivity"
+            android:label="@string/title_activity_main_menu" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddStoryActivity"
+            android:label="@string/title_activity_add_story" >
+        </activity>
+        <activity
+            android:name=".AddChapterActivity"
+            android:label="@string/title_activity_add_chapter" >
+        </activity>
+        <activity
+            android:name=".AddGPSInteraction"
+            android:label="@string/title_activity_add_gps_interaction" >
+        </activity>
+        <activity
+            android:name=".AddNFCInteraction"
+            android:label="@string/title_activity_add_nfc_interaction" >
+        </activity>
+        <activity
+            android:name=".AddQRCodeInteraction"
+            android:label="@string/title_activity_add_qr_code_interaction" >
+        </activity>
+        <activity
+            android:name=".AddQuizInteraction"
+            android:label="@string/title_activity_add_quiz_interaction" >
+        </activity>
+        <activity
+            android:name=".AddSpellCheckInteraction"
+            android:label="@string/title_activity_add_spell_check_interaction" >
+        </activity>
     </application>
 
 </manifest>
