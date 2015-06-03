@@ -13,12 +13,14 @@ public class Story {
     private ArrayList<Chapter> chapters;
 
     public Story() {
+        chapters = new ArrayList<>();
     }
 
     public Story(Author author, String title, String summary) {
         this.author = author;
         this.title = title;
         this.summary = summary;
+        chapters = new ArrayList<>();
     }
 
     public Author getAuthor() {
@@ -52,5 +54,15 @@ public class Story {
     public void addChapter(Chapter chapter)
     {
         chapters.add(chapter);
+    }
+
+    public void moveChapter(Chapter chapter, int position)
+    {
+        int index = chapters.indexOf(chapter);
+        if(index != -1)
+        {
+            chapters.remove(index);
+            chapters.add(position,chapter);
+        }
     }
 }
