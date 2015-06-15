@@ -1,8 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="@android:style/Theme.NoTitleBar">
+        <item name="android:editTextStyle">@style/CustomEditText</item>
     </style>
 
     <style name="CustomButton">
@@ -10,10 +10,14 @@
     </style>
 
     <style name="CustomEditText">
-
+        <item name="android:background">@drawable/box</item>
     </style>
 
     <style name="CustomTextView">
+
+    </style>
+
+    <style name="CustomTextViewTitle">
 
     </style>
 

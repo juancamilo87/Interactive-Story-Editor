@@ -1,0 +1,144 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@android:color/white">
+<RelativeLayout
+    android:id="@+id/chapter_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true">
+    <TextView
+        android:text="Edit Chapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:background="@color/theme_blue"
+        android:layout_gravity="center"
+        style="@style/Base.TextAppearance.AppCompat.Title"/>
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:text="Save"
+        android:background="@drawable/save_btn_background"
+        android:textSize="14sp"
+        android:layout_marginEnd="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/theme_blue"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        />
+
+</RelativeLayout>
+
+    <Button
+        android:id="@+id/chapter_btn_add_interaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Add Interaction"
+        android:layout_marginBottom="25dp"
+        android:textAllCaps="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/theme_blue"
+        android:textColor="@android:color/white"
+        />
+
+<LinearLayout
+    android:layout_below="@id/chapter_title"
+    android:layout_above="@id/chapter_btn_add_interaction"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/chapter_txt_title"
+        android:text="Title"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:id="@+id/chapter_edt_title"
+        android:layout_below="@id/chapter_txt_title"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:layout_marginBottom="10dp"
+        />
+    <TextView
+        android:text="Content"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_insert_photo_white_48dp"
+        android:tint="@color/theme_blue"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="center"
+        />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_videocam_white_48dp"
+        android:tint="@color/theme_blue"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="center"
+        />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_volume_up_white_48dp"
+        android:tint="@color/theme_blue"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="center"
+        />
+</LinearLayout>
+    <EditText
+        android:id="@+id/chapter_edt_content"
+        android:layout_below="@id/chapter_txt_title"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        />
+
+</LinearLayout>
+
+
+
+
+</RelativeLayout>
