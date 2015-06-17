@@ -21,6 +21,7 @@
         android:layout_gravity="center"
         style="@style/Base.TextAppearance.AppCompat.Title"/>
     <Button
+        android:id="@+id/chapter_btn_save"
         android:layout_width="50dp"
         android:layout_height="25dp"
         android:text="Save"
@@ -122,6 +123,7 @@
 
 
     <ImageButton
+        android:id="@+id/chapter_btn_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -131,6 +133,7 @@
         android:layout_gravity="center"
         />
     <ImageButton
+        android:id="@+id/chapter_btn_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -140,6 +143,7 @@
         android:layout_gravity="center"
         />
     <ImageButton
+        android:id="@+id/chapter_btn_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
