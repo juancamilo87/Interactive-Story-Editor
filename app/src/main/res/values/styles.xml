@@ -21,4 +21,52 @@
 
     </style>
 
+    <style name="myButton">
+        <item name="android:layout_width" >300dp</item>
+        <item name="android:layout_height" >wrap_content</item>
+        <item name="android:layout_marginLeft" >@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginRight" >@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_alignParentBottom" >true</item>
+        <item name="android:layout_alignParentStart" >true</item>
+        <item name="android:layout_marginBottom" >25dp</item>
+        <item name="android:textAllCaps" >false</item>
+        <item name="android:paddingTop" >8dp</item>
+        <item name="android:paddingBottom" >8dp</item>
+        <item name="android:textSize" >20sp</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:background" >@drawable/add_btn_background</item>
+        <item name="android:textColor" >@android:color/white</item>
+        <item name="android:layout_gravity" >center_horizontal</item>
+    </style>
+
+    <style name="SmallButton">
+        <item name="android:layout_width" >50dp</item>
+        <item name="android:layout_height" >25dp</item>
+        <item name="android:background" >@drawable/save_btn_background</item>
+        <item name="android:textSize" >14sp</item>
+        <item name="android:layout_marginEnd" >30dp</item>
+        <item name="android:textAllCaps" >false</item>
+        <item name="android:textColor" >@color/theme_blue</item>
+        <item name="style" >?android:attr/borderlessButtonStyle</item>
+        <item name="android:layout_alignParentEnd" >true</item>
+        <item name="android:layout_centerVertical" >true</item>
+    </style>
+
+    <style name="TitleName">
+        <item name="android:layout_width" >match_parent</item>
+        <item name="android:layout_height" >wrap_content</item>
+        <item name="android:padding" >15dp</item>
+        <item name="android:textSize" >25sp</item>
+        <item name="android:textColor" >@android:color/white</item>
+        <item name="android:gravity" >center_horizontal</item>
+        <item name="android:layout_centerInParent" >true</item>
+        <item name="android:background" >@color/theme_blue</item>
+        <item name="style" >@style/Base.TextAppearance.AppCompat.Title</item>
+        <item name="android:layout_gravity" >center</item>
+    </style>
+
+    <style name="mySubtitle">
+
+    </style>
+
 </resources>
