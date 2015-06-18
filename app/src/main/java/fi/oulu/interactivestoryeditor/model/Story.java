@@ -11,9 +11,11 @@ public class Story {
     private String title;
     private String summary;
     private ArrayList<Chapter> chapters;
+    private long story_id;
 
     public Story() {
         chapters = new ArrayList<>();
+        this.story_id = -1;
     }
 
     public Story(Author author, String title, String summary) {
@@ -21,6 +23,19 @@ public class Story {
         this.title = title;
         this.summary = summary;
         chapters = new ArrayList<>();
+        this.story_id = -1;
+    }
+
+    public Story(Author author, String title, String summary, long story_id) {
+        this.author = author;
+        this.title = title;
+        this.summary = summary;
+        this.story_id = story_id;
+        chapters = new ArrayList<>();
+    }
+
+    public long getStory_id(){
+        return  story_id;
     }
 
     public Author getAuthor() {
@@ -37,6 +52,10 @@ public class Story {
 
     public ArrayList<Chapter> getChapters() {
         return chapters;
+    }
+
+    public void setStory_id(int story_id){
+        this.story_id = story_id;
     }
 
     public void setAuthor(Author author) {
@@ -56,8 +75,7 @@ public class Story {
         chapters.add(chapter);
     }
 
-    public void moveChapter(Chapter chapter, int position)
-    {
+    public void moveChapter(Chapter chapter, int position) {
         int index = chapters.indexOf(chapter);
         if(index != -1)
         {
@@ -65,4 +83,5 @@ public class Story {
             chapters.add(position,chapter);
         }
     }
+
 }

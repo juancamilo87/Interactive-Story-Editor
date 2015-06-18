@@ -10,50 +10,19 @@
     android:layout_alignParentTop="true">
     <TextView
         android:text="Edit Chapter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:textSize="25sp"
-        android:textColor="@android:color/white"
-        android:gravity="center_horizontal"
-        android:layout_centerInParent="true"
-        android:background="@color/theme_blue"
-        android:layout_gravity="center"
-        style="@style/Base.TextAppearance.AppCompat.Title"/>
+        style="@style/TitleName"/>
     <Button
         android:id="@+id/chapter_btn_save"
-        android:layout_width="50dp"
-        android:layout_height="25dp"
         android:text="Save"
-        android:background="@drawable/save_btn_background"
-        android:textSize="14sp"
-        android:layout_marginEnd="30dp"
-        android:textAllCaps="false"
-        android:textColor="@color/theme_blue"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        style="@style/SmallButton"
         />
 
 </RelativeLayout>
 
     <Button
         android:id="@+id/chapter_btn_add_interaction"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:text="Add Interaction"
-        android:layout_marginBottom="25dp"
-        android:textAllCaps="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:background="@drawable/add_btn_background"
-        android:textColor="@android:color/white"
+        style="@style/myButton"
         />
 
 <LinearLayout
