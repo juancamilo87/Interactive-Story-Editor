@@ -16,6 +16,7 @@
             />
         <Button
             android:text="Save"
+            android:id="@+id/qr_btn_save"
             style="@style/SmallButton"
             />
     </RelativeLayout>
@@ -27,7 +28,13 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:textColor="#ff000000">
+        android:textColor="#ff000000"
+        android:editable="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.11">
         <requestFocus />
     </EditText>
     <Button
