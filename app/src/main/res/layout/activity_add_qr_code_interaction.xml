@@ -12,10 +12,11 @@
         android:layout_alignParentTop="true">
         <TextView
             android:text="Edit QR Code"
-            style = "@style/TitleName"/>
+            style="@style/TitleName"
+            />
         <Button
             android:text="Save"
-            style = "@style/SmallButton"
+            style="@style/SmallButton"
             />
     </RelativeLayout>
     <EditText android:id="@+id/qrInput"
@@ -31,7 +32,7 @@
     </EditText>
     <Button
         android:id="@+id/qrcode"
-        style = "@style/myButton"
+        style="@style/myButton"
         android:text="Generate QR Code"/>
 
     <ImageView android:id="@+id/imageView1"
