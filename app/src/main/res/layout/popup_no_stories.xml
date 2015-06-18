@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/no_story_popup">
+
+    <RelativeLayout
+        android:id="@+id/story_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:text="Tips"
+            style="@style/TitleName"
+            />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/popup_btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="OK"
+        android:layout_marginBottom="25dp"
+        android:textAllCaps="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/theme_blue"
+        android:textColor="@android:color/white"
+        />
+
+    <LinearLayout
+        android:layout_below="@id/story_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/story_list_txt"
+            android:text="Your story list is empty. Press + button and create your own story!"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

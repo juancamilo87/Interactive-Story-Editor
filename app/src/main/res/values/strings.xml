@@ -8,6 +8,6 @@
     <string name="title_activity_add_qr_code_interaction">AddQRCodeInteractionActivity</string>
     <string name="title_activity_add_quiz_interaction">AddQuizInteractionActivity</string>
     <string name="title_activity_add_spell_check_interaction">AddSpellCheckInteractionActivity</string>
-
+    <string name="show_story_list_title">Story List</string>
     <string name="hello_world">Hello world!</string>
 </resources>
