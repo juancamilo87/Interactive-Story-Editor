@@ -131,7 +131,7 @@ public class MainMenuActivity extends Activity {
 
                             // send request
                             AsyncHttpClient client = new AsyncHttpClient();
-                            client.post("http://memoryhelper.netne.net/testupload/upload.php", params, new AsyncHttpResponseHandler() {
+                            client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                                     Toast.makeText(getApplicationContext(), "in success", Toast.LENGTH_LONG).show();
