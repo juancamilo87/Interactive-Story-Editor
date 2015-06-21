@@ -9,10 +9,17 @@ public class GPSInteraction extends Interaction {
     private float longitude;
 
     public GPSInteraction() {
+        super();
     }
 
-    public GPSInteraction(String interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, float latitude, float longitude) {
+    public GPSInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, float latitude, float longitude) {
         super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl);
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public GPSInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, float latitude, float longitude, long interaction_id) {
+        super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl, interaction_id);
         this.latitude = latitude;
         this.longitude = longitude;
     }

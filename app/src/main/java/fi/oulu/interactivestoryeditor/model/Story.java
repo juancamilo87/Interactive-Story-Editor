@@ -1,6 +1,7 @@
 package fi.oulu.interactivestoryeditor.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JuanCamilo on 5/7/2015.
@@ -10,7 +11,7 @@ public class Story {
     private Author author;
     private String title;
     private String summary;
-    private ArrayList<Chapter> chapters;
+    private List<Chapter> chapters;
     private long story_id;
 
     public Story() {
@@ -50,7 +51,7 @@ public class Story {
         return summary;
     }
 
-    public ArrayList<Chapter> getChapters() {
+    public List<Chapter> getChapters() {
         return chapters;
     }
 
@@ -73,6 +74,11 @@ public class Story {
     public void addChapter(Chapter chapter)
     {
         chapters.add(chapter);
+    }
+
+    public void setChapters(List<Chapter> chapters)
+    {
+        this.chapters = chapters;
     }
 
     public void moveChapter(Chapter chapter, int position) {
