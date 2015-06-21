@@ -1,7 +1,9 @@
 package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -49,6 +51,17 @@ public class AddStoryActivity extends Activity {
         chapters_list = (ListView) findViewById(R.id.chapters_list);
         btn_save = (Button) findViewById(R.id.story_btn_save);
         btn_add_chapter = (Button) findViewById(R.id.story_btn_add_chapter);
+
+        btn_add_chapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent i = new Intent(getApplicationContext(), AddChapterActivity.class);
+                startActivity(i);
+            }
+        });
+
+        
 
 
     }
