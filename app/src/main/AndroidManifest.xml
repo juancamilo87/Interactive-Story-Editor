@@ -5,6 +5,7 @@
     <uses-sdk android:minSdkVersion="15" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -47,6 +48,7 @@
             android:name=".AddSpellCheckInteraction"
             android:label="@string/title_activity_add_spell_check_interaction" >
         </activity>
+        <activity android:name=".FilePicker"></activity>
     </application>
 
 </manifest>
