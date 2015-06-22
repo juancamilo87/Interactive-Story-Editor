@@ -3,14 +3,26 @@ package fi.oulu.interactivestoryeditor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 import fi.oulu.interactivestoryeditor.model.Author;
 import fi.oulu.interactivestoryeditor.model.Chapter;
@@ -21,8 +33,7 @@ public class AddStoryActivity extends Activity {
 
 
     private Author author;
-    private Story story;
-    private ArrayList<Chapter> chapters;
+    private List<Chapter> chapters;
 
     private EditText title_edit;
     private EditText summary_edit;
@@ -40,6 +51,10 @@ public class AddStoryActivity extends Activity {
     private String author_lastname;
     private String author_website;
     private String author_email;
+
+    private static final int ADD_CHAPTER = 1;
+
+    ArrayAdapter<Chapter> arrayAdapter;
 
 
     @Override
@@ -73,19 +88,40 @@ public class AddStoryActivity extends Activity {
         author.setWebsite(author_website);
         author.setEmail(author_email);
 
-        ArrayAdapter<Chapter> arrayAdapter = new ArrayAdapter<Chapter>(
+        arrayAdapter = new ArrayAdapter<Chapter>(
                 this,
                 android.R.layout.simple_list_item_1,
                 chapters);
 
         chapters_list.setAdapter(arrayAdapter);
 
+        //Take into account edit of a chapter and not just the creation of one
+        if(getIntent().getParcelableExtra("old_story")!= null)
+        {
+            Story story = (Story) getIntent().getParcelableExtra("old_story");
+
+            title_edit.setText(story.getTitle());
+            summary_edit.setText(story.getSummary());
+            name_edit.setText(story.getAuthor().getName());
+            lastname_edit.setText(story.getAuthor().getLast_name());
+            website_edit.setText(story.getAuthor().getWebsite());
+            email_edit.setText(story.getAuthor().getEmail());
+
+            chapters = story.getChapters();
+            arrayAdapter = new ArrayAdapter<Chapter>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    chapters);
+
+            chapters_list.setAdapter(arrayAdapter);
+        }
+
         btn_add_chapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), AddChapterActivity.class);
-                startActivity(i);
+                startActivityForResult(i, ADD_CHAPTER);
             }
         });
 
@@ -94,15 +130,14 @@ public class AddStoryActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    story = new Story(author, title, summary);
+                    Story story = new Story(author, title, summary);
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("story", (Parcelable) story);
                     setResult(RESULT_OK, returnIntent);
                     finish();
                 } else {
-                    setResult(RESULT_CANCELED);
-                    finish();
+                    Toast.makeText(getApplicationContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -171,6 +206,25 @@ public class AddStoryActivity extends Activity {
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+
+            switch(requestCode) {
+
+                case ADD_CHAPTER:
+                    Chapter chapter = (Chapter) data.getParcelableExtra("chapter");
+                    chapters.add(chapter);
+                    arrayAdapter.notifyDataSetChanged();
+
+                    break;
+
+
+            }
+        }
+
     }
 
 
