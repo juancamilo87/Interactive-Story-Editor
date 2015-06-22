@@ -74,13 +74,17 @@ public class ChaptersDataSource {
                 deleteChapter(deleteId);
             }
             long insertId = database.insert(MySQLiteHelper.TABLE_CHAPTERS, null, values);
-
-            InteractionsDataSource interactionsDataSource = new InteractionsDataSource(context);
-            interactionsDataSource.open();
-            Interaction interaction = interactionsDataSource.createInteraction(chapter.getInteraction(),insertId);
-            interactionsDataSource.close();
+            Interaction interaction = null;
+            if(chapter.getInteraction()!=null)
+            {
+                InteractionsDataSource interactionsDataSource = new InteractionsDataSource(context);
+                interactionsDataSource.open();
+                interaction = interactionsDataSource.createInteraction(chapter.getInteraction(),insertId);
+                interactionsDataSource.close();
+            }
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_CHAPTERS,
-                    allColumns, MySQLiteHelper.COLUMN_CHAPTERS_ID+ " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_CHAPTERS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             Chapter newChapter = cursorToChapter(otherCursor);
             otherCursor.close();
             newChapter.setInteraction(interaction);
@@ -120,15 +124,22 @@ public class ChaptersDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_CHAPTERS_ID + "=" + chapter.getChapter_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_CHAPTERS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_CHAPTERS, values, strFilter, null);
 
-            InteractionsDataSource interactionsDataSource = new InteractionsDataSource(context);
-            interactionsDataSource.open();
-            Interaction interaction = interactionsDataSource.createInteraction(chapter.getInteraction(),insertId);
-            interactionsDataSource.close();
+            Interaction interaction = null;
+
+            if(chapter.getInteraction()!=null)
+            {
+                InteractionsDataSource interactionsDataSource = new InteractionsDataSource(context);
+                interactionsDataSource.open();
+                interaction = interactionsDataSource.createInteraction(chapter.getInteraction(),chapter.getChapter_id());
+                interactionsDataSource.close();
+            }
+
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_CHAPTERS,
-                    allColumns, MySQLiteHelper.COLUMN_CHAPTERS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_CHAPTERS_ID + " = " + chapter.getChapter_id(), null, null, null, null);
+            otherCursor.moveToFirst();
             Chapter newChapter = cursorToChapter(otherCursor);
             otherCursor.close();
             newChapter.setInteraction(interaction);
@@ -225,13 +236,14 @@ public class ChaptersDataSource {
     }
 
     private Chapter cursorToChapter(Cursor cursor) {
+        long id = cursor.getLong(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_ID));
         String title = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_TITLE));
         String text = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_TEXT));
         String image_url = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_IMAGE_URL));
         String video_url = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_VIDEO_URL));
         String audio_url = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_CHAPTERS_AUDIO_URL));
 
-        Chapter chapter = new Chapter(title, text, image_url, video_url, audio_url);
+        Chapter chapter = new Chapter(title, text, image_url, video_url, audio_url, id);
         return chapter;
     }
 

@@ -218,6 +218,15 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chapters"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="10dp"/>
 
             <ListView
                 android:id="@+id/chapters_list"

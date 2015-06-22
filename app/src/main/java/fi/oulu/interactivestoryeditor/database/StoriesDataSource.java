@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +54,14 @@ public class StoriesDataSource {
         else {
             ContentValues values = new ContentValues();
             values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getName());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getLast_name());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getWebsite());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getEmail());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getTitle());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getSummary());
+            values.put(MySQLiteHelper.COLUMN_STORIES_LAST_NAME, story.getAuthor().getLast_name());
+            values.put(MySQLiteHelper.COLUMN_STORIES_WEBSITE, story.getAuthor().getWebsite());
+            values.put(MySQLiteHelper.COLUMN_STORIES_EMAIL, story.getAuthor().getEmail());
+            values.put(MySQLiteHelper.COLUMN_STORIES_TITLE, story.getTitle());
+            values.put(MySQLiteHelper.COLUMN_STORIES_SUMMARY, story.getSummary());
             long insertId = database.insert(MySQLiteHelper.TABLE_STORIES, null,
                     values);
+            Log.d("id", insertId+"");
             Cursor cursor = database.query(MySQLiteHelper.TABLE_STORIES,
                     allColumns, MySQLiteHelper.COLUMN_STORIES_ID + " = " + insertId, null,
                     null, null, null);
@@ -130,21 +132,21 @@ public class StoriesDataSource {
     }
 
     public Story updateStory(Story story){
-        if(story.getStory_id() != -1) {
+        if(story.getStory_id() == -1) {
             return null;
         }
         else {
             ContentValues values = new ContentValues();
             values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getName());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getLast_name());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getWebsite());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getEmail());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getTitle());
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getSummary());
+            values.put(MySQLiteHelper.COLUMN_STORIES_LAST_NAME, story.getAuthor().getLast_name());
+            values.put(MySQLiteHelper.COLUMN_STORIES_WEBSITE, story.getAuthor().getWebsite());
+            values.put(MySQLiteHelper.COLUMN_STORIES_EMAIL, story.getAuthor().getEmail());
+            values.put(MySQLiteHelper.COLUMN_STORIES_TITLE, story.getTitle());
+            values.put(MySQLiteHelper.COLUMN_STORIES_SUMMARY, story.getSummary());
             String strFilter = MySQLiteHelper.COLUMN_STORIES_ID + "=" + story.getStory_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_STORIES,values, strFilter,null);
+            long rows = database.update(MySQLiteHelper.TABLE_STORIES, values, strFilter, null);
             Cursor cursor = database.query(MySQLiteHelper.TABLE_STORIES,
-                    allColumns, MySQLiteHelper.COLUMN_STORIES_ID + " = " + insertId, null,
+                    allColumns, MySQLiteHelper.COLUMN_STORIES_ID + " = " + story.getStory_id(), null,
                     null, null, null);
             cursor.moveToFirst();
             Story newStory = cursorToStory(cursor);
@@ -153,7 +155,7 @@ public class StoriesDataSource {
             chaptersDataSource.open();
             for(int i = 0; i<story.getChapters().size(); i++)
             {
-                newStory.addChapter(chaptersDataSource.createChapter(story.getChapters().get(i),insertId,i+1));
+                newStory.addChapter(chaptersDataSource.createChapter(story.getChapters().get(i),story.getStory_id(),i+1));
             }
             chaptersDataSource.close();
             cursor.close();

@@ -361,7 +361,21 @@ public class AddChapterActivity extends Activity {
                     break;
             }
         }
-
+        else {
+            switch (requestCode) {
+                case ADD_INTERACTION:
+                    break;
+                case REQUEST_IMAGE_FILE:
+                    image_uploading = false;
+                    break;
+                case REQUEST_AUDIO_FILE:
+                    audio_uploading = false;
+                    break;
+                case REQUEST_VIDEO_FILE:
+                    video_uploading = false;
+                    break;
+            }
+        }
     }
 
     @Override
@@ -370,7 +384,7 @@ public class AddChapterActivity extends Activity {
         {
             setResult(RESULT_CANCELED);
             finish();
-        }
+        }else
         {
             Toast.makeText(this, "Please wait a moment till the files are finished uploading",Toast.LENGTH_SHORT).show();
         }

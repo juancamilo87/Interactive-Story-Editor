@@ -31,7 +31,7 @@
             android:id="@+id/story_list">
     </ListView>
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/story_empty_view"
         android:layout_below="@id/story_list_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"

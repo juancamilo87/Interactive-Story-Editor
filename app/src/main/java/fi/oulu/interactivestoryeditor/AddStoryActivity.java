@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,7 +54,10 @@ public class AddStoryActivity extends Activity {
     private String author_website;
     private String author_email;
 
+    private Chapter editingChapter;
+
     private static final int ADD_CHAPTER = 1;
+    private static final int EDIT_CHAPTER = 2;
 
     ArrayAdapter<Chapter> arrayAdapter;
 
@@ -77,29 +81,19 @@ public class AddStoryActivity extends Activity {
         btn_save = (Button) findViewById(R.id.story_btn_save);
         btn_add_chapter = (Button) findViewById(R.id.story_btn_add_chapter);
 
-        title = title_edit.getText().toString();
-        summary = summary_edit.getText().toString();
-        author_name = name_edit.getText().toString();
-        author_lastname = lastname_edit.getText().toString();
-        author_website = website_edit.getText().toString();
-        author_email = email_edit.getText().toString();
 
-        author.setName(author_name);
-        author.setLast_name(author_lastname);
-        author.setWebsite(author_website);
-        author.setEmail(author_email);
 
         arrayAdapter = new ArrayAdapter<Chapter>(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.list_cell,
                 chapters);
 
         chapters_list.setAdapter(arrayAdapter);
 
         //Take into account edit of a chapter and not just the creation of one
-        if(getIntent().getParcelableExtra("old_story")!= null)
+        if(getIntent().getSerializableExtra("old_story")!= null)
         {
-            Story story = (Story) getIntent().getParcelableExtra("old_story");
+            Story story = (Story) getIntent().getSerializableExtra("old_story");
 
             title_edit.setText(story.getTitle());
             summary_edit.setText(story.getSummary());
@@ -111,11 +105,28 @@ public class AddStoryActivity extends Activity {
             chapters = story.getChapters();
             arrayAdapter = new ArrayAdapter<Chapter>(
                     this,
-                    android.R.layout.simple_list_item_1,
+                    R.layout.list_cell,
                     chapters);
 
             chapters_list.setAdapter(arrayAdapter);
         }
+
+        chapters_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                editingChapter = arrayAdapter.getItem(i);
+                Intent intent = new Intent(getApplicationContext(), AddChapterActivity.class);
+                intent.putExtra("old_chapter", (Serializable) editingChapter);
+                startActivityForResult(intent, EDIT_CHAPTER);
+            }
+        });
+
+        title = title_edit.getText().toString();
+        summary = summary_edit.getText().toString();
+        author_name = name_edit.getText().toString();
+        author_lastname = lastname_edit.getText().toString();
+        author_website = website_edit.getText().toString();
+        author_email = email_edit.getText().toString();
 
         btn_add_chapter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,8 +142,9 @@ public class AddStoryActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
+                    author = new Author(author_name,author_lastname,author_website,author_email);
                     Story story = new Story(author, title, summary);
-
+                    story.setChapters(chapters);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("story", (Serializable) story);
                     setResult(RESULT_OK, returnIntent);
@@ -146,7 +158,7 @@ public class AddStoryActivity extends Activity {
 
     private boolean verifyFields()
     {
-        if(!title.trim().equals(""))
+        if(!title_edit.getText().toString().trim().equals(""))
         {
             title = title_edit.getText().toString().trim();
         }
@@ -155,7 +167,7 @@ public class AddStoryActivity extends Activity {
             return false;
         }
 
-        if(!summary.trim().equals(""))
+        if(!summary_edit.getText().toString().trim().equals(""))
         {
             summary = summary_edit.getText().toString().trim();
         }
@@ -164,7 +176,7 @@ public class AddStoryActivity extends Activity {
             return false;
         }
 
-        if(!author_name.trim().equals(""))
+        if(!name_edit.getText().toString().trim().equals(""))
         {
             author_name = name_edit.getText().toString().trim();
         }
@@ -173,7 +185,7 @@ public class AddStoryActivity extends Activity {
             return false;
         }
 
-        if(!author_lastname.trim().equals(""))
+        if(!lastname_edit.getText().toString().trim().equals(""))
         {
             author_lastname = lastname_edit.getText().toString().trim();
         }
@@ -182,23 +194,10 @@ public class AddStoryActivity extends Activity {
             return false;
         }
 
-        if(!author_website.trim().equals(""))
-        {
-            author_website = website_edit.getText().toString().trim();
-        }
-        else
-        {
-            return false;
-        }
+        author_website = website_edit.getText().toString().trim();
 
-        if(!author_email.trim().equals(""))
-        {
-            author_email = email_edit.getText().toString().trim();
-        }
-        else
-        {
-            return false;
-        }
+        author_email = email_edit.getText().toString().trim();
+
 
         return true;
     }
@@ -212,14 +211,23 @@ public class AddStoryActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-
+            Chapter chapter;
             switch(requestCode) {
 
                 case ADD_CHAPTER:
-                    Chapter chapter = (Chapter) data.getParcelableExtra("chapter");
+                    chapter = (Chapter) data.getSerializableExtra("chapter");
                     chapters.add(chapter);
                     arrayAdapter.notifyDataSetChanged();
 
+                    break;
+
+                case EDIT_CHAPTER:
+
+                    chapter = (Chapter) data.getSerializableExtra("chapter");
+                    int index = chapters.indexOf(editingChapter);
+                    chapters.remove(editingChapter);
+                    chapters.add(index, chapter);
+                    arrayAdapter.notifyDataSetChanged();
                     break;
 
 

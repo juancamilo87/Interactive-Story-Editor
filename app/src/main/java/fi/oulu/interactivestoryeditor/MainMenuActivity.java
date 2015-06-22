@@ -37,6 +37,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +70,9 @@ public class MainMenuActivity extends Activity {
 
         ListView storyList = (ListView) findViewById(R.id.story_list);
         adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
+                R.layout.list_cell,
                 stories);
+        storyList.setEmptyView(findViewById(R.id.story_empty_view));
 
         storyList.setAdapter(adapter);
 
@@ -79,7 +81,7 @@ public class MainMenuActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 editingStory = adapter.getItem(i);
                 Intent intent = new Intent(context, AddStoryActivity.class);
-                intent.putExtra("old_story", (Parcelable) editingStory);
+                intent.putExtra("old_story", (Serializable) editingStory);
                 startActivityForResult(intent, EDIT_STORY);
             }
         });
@@ -158,8 +160,9 @@ public class MainMenuActivity extends Activity {
                     storiesDataSource.open();
                     newStory = storiesDataSource.updateStory(editStory);
                     storiesDataSource.close();
+                    int index = stories.indexOf(editingStory);
                     stories.remove(editingStory);
-                    stories.add(newStory);
+                    stories.add(index,newStory);
                     adapter.notifyDataSetChanged();
                     break;
             }

@@ -168,6 +168,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             GPSInteraction newInteraction = cursorToGPSInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -213,6 +214,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             GPSInteraction newInteraction = cursorToGPSInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -252,6 +254,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             NFCInteraction newInteraction = cursorToNFCInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -296,6 +299,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             NFCInteraction newInteraction = cursorToNFCInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -335,6 +339,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             QRCodeInteraction newInteraction = cursorToQRCodeInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -379,6 +384,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             QRCodeInteraction newInteraction = cursorToQRCodeInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -423,6 +429,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             QuizInteraction newInteraction = cursorToQuizInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -472,6 +479,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             QuizInteraction newInteraction = cursorToQuizInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -510,6 +518,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             SpellCheckInteraction newInteraction = cursorToSpellCheckInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
@@ -554,6 +563,7 @@ public class InteractionsDataSource {
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+            otherCursor.moveToFirst();
             SpellCheckInteraction newInteraction = cursorToSpellCheckInteraction(otherCursor);
             otherCursor.close();
             return newInteraction;
