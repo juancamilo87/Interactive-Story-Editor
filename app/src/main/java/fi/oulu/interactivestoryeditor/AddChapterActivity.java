@@ -25,6 +25,7 @@ import org.apache.http.Header;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 import fi.oulu.interactivestoryeditor.model.Chapter;
 import fi.oulu.interactivestoryeditor.model.Interaction;
@@ -102,7 +103,7 @@ public class AddChapterActivity extends Activity {
                         }
 
                         Intent returnIntent = new Intent();
-                        returnIntent.putExtra("chapter", (Parcelable) chapter);
+                        returnIntent.putExtra("chapter", (Serializable) chapter);
                         setResult(RESULT_OK, returnIntent);
                         finish();
                     } else {
@@ -119,9 +120,9 @@ public class AddChapterActivity extends Activity {
 
 
         //Take into account edit of a chapter and not just the creation of one
-        if(getIntent().getParcelableExtra("old_chapter")!= null)
+        if(getIntent().getSerializableExtra("old_chapter")!= null)
         {
-            Chapter chapter = (Chapter) getIntent().getParcelableExtra("old_chapter");
+            Chapter chapter = (Chapter) getIntent().getSerializableExtra("old_chapter");
 
             edt_title.setText(chapter.getTitle());
             edt_content.setText(chapter.getText());

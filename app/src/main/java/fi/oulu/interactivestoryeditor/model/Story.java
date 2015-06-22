@@ -1,12 +1,15 @@
 package fi.oulu.interactivestoryeditor.model;
 
+import android.app.Service;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by JuanCamilo on 5/7/2015.
  */
-public class Story {
+public class Story implements Serializable {
 
     private Author author;
     private String title;

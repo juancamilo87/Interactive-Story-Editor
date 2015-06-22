@@ -1,9 +1,11 @@
 package fi.oulu.interactivestoryeditor.model;
 
+import java.io.Serializable;
+
 /**
  * Created by JuanCamilo on 5/7/2015.
  */
-public class QuizInteraction extends Interaction {
+public class QuizInteraction extends Interaction implements Serializable{
 
     private String question;
     private String correctAnswer;

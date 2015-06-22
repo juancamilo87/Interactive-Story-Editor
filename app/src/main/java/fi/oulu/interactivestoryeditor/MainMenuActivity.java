@@ -143,7 +143,7 @@ public class MainMenuActivity extends Activity {
 
                 case ADD_STORY:
 
-                    Story story = (Story) data.getParcelableExtra("story");
+                    Story story = (Story) data.getSerializableExtra("story");
 
                     storiesDataSource.open();
                     newStory = storiesDataSource.createStory(story);
@@ -153,7 +153,7 @@ public class MainMenuActivity extends Activity {
                     break;
                 case EDIT_STORY:
 
-                    Story editStory = (Story) data.getParcelableExtra("story");
+                    Story editStory = (Story) data.getSerializableExtra("story");
                     editStory.setStory_id(editingStory.getStory_id());
                     storiesDataSource.open();
                     newStory = storiesDataSource.updateStory(editStory);

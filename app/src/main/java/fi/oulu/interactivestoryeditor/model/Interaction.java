@@ -1,9 +1,11 @@
 package fi.oulu.interactivestoryeditor.model;
 
+import java.io.Serializable;
+
 /**
  * Created by JuanCamilo on 5/7/2015.
  */
-public class Interaction {
+public class Interaction implements Serializable{
 
     public static final int GPS_INTERACTION = 1;
     public static final int NFC_INTERACTION = 2;

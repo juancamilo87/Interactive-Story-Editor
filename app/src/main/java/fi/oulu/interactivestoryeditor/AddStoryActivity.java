@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import fi.oulu.interactivestoryeditor.model.Author;
@@ -97,7 +98,7 @@ public class AddStoryActivity extends Activity {
                     story = new Story(author, title, summary);
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("story", (Parcelable) story);
+                    returnIntent.putExtra("story", (Serializable) story);
                     setResult(RESULT_OK, returnIntent);
                     finish();
                 } else {

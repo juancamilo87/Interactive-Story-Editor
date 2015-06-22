@@ -1,9 +1,11 @@
 package fi.oulu.interactivestoryeditor.model;
 
+import java.io.Serializable;
+
 /**
  * Created by JuanCamilo on 6/3/2015.
  */
-public class Author {
+public class Author implements Serializable{
 
     private String name;
     private String last_name;

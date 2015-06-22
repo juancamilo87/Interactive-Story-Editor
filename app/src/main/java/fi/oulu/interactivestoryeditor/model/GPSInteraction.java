@@ -1,9 +1,11 @@
 package fi.oulu.interactivestoryeditor.model;
 
+import java.io.Serializable;
+
 /**
  * Created by JuanCamilo on 5/7/2015.
  */
-public class GPSInteraction extends Interaction {
+public class GPSInteraction extends Interaction implements Serializable {
 
     private float latitude;
     private float longitude;
