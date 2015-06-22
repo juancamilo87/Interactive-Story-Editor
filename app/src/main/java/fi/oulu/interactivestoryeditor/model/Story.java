@@ -90,4 +90,7 @@ public class Story {
         }
     }
 
+    @Override
+    public String toString() { return title; }
+
 }

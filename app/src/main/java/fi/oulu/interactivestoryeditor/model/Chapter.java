@@ -85,4 +85,7 @@ public class Chapter {
     public long getChapter_id(){
         return chapter_id;
     }
+
+    @Override
+    public String toString() { return title; }
 }
