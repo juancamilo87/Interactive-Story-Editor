@@ -21,32 +21,26 @@
         />
     </RelativeLayout>
 
-    <LinearLayout
+    <ListView
             android:layout_below="@id/story_list_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/story_list_txt"
-                android:text="Your story list is empty."
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/upload_file"
-            android:text="Upload File"
-            />
-
-    </LinearLayout>
+            android:id="@+id/story_list">
+    </ListView>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_below="@id/story_list_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Your story list is empty."
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 </RelativeLayout>

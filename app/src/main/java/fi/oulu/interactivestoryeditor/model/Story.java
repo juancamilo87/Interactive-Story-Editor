@@ -55,7 +55,7 @@ public class Story {
         return chapters;
     }
 
-    public void setStory_id(int story_id){
+    public void setStory_id(long story_id){
         this.story_id = story_id;
     }
 

@@ -8,12 +8,16 @@ import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -42,114 +46,123 @@ import fi.oulu.interactivestoryeditor.database.StoriesDataSource;
 
 public class MainMenuActivity extends Activity {
 
-    private static final int REQUEST_PICK_FILE = 1;
-    private File selectedFile;
+    private static final int ADD_STORY = 1;
+    private static final int EDIT_STORY = 2;
+
+    private ArrayAdapter<Story> adapter;
+    private List<Story> stories;
+
+    private Context context;
+
+    private Story editingStory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main_menu);
+        context = this;
         setContentView(R.layout.activity_show_story_list);
         Log.d("SP", "Test log works?");
         get_story_list();
-        showPopup(MainMenuActivity.this);
+//        showPopup(MainMenuActivity.this);
 
-        Button uploadBtn = (Button)findViewById(R.id.upload_file);
+        ListView storyList = (ListView) findViewById(R.id.story_list);
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                stories);
 
-        uploadBtn.setOnClickListener( new View.OnClickListener() {
+        storyList.setAdapter(adapter);
 
+        storyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FilePicker.class);
-                startActivityForResult(intent, REQUEST_PICK_FILE);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                editingStory = adapter.getItem(i);
+                Intent intent = new Intent(context, AddStoryActivity.class);
+                intent.putExtra("old_story", (Parcelable) editingStory);
+                startActivityForResult(intent, EDIT_STORY);
             }
         });
+
+        ((Button) findViewById(R.id.story_list_btn_add_story)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AddStoryActivity.class);
+                startActivityForResult(intent, ADD_STORY);
+            }
+        });
+
+
 
     }
 
-    private void showPopup(final Activity context) {
-        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.no_story_popup);
-        LayoutInflater layoutInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View layout = layoutInflater.inflate(R.layout.popup_no_stories, viewGroup);
-        Button popup_ok_btn = (Button) layout.findViewById(R.id.popup_btn_ok);
-        // Create the popup window
-        final PopupWindow popup = new PopupWindow(context);
-        popup.setContentView(layout);
-        popup.setWidth(600);
-        popup.setHeight(600);
-        popup.setFocusable(true);
-
-        // Displaying the popup centralized
-        //To avoid BadTokenException, you need to defer showing the popup until after all the lifecycle methods are called (-> activity window is displayed):
-        layout.post(new Runnable() {
-            public void run() {
-                popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
-            }
-        });
-
-        popup_ok_btn.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                popup.dismiss();
-            }
-        });
-    }
+//    private void showPopup(final Activity context) {
+//        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.no_story_popup);
+//        LayoutInflater layoutInflater = (LayoutInflater) context
+//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        final View layout = layoutInflater.inflate(R.layout.popup_no_stories, viewGroup);
+//        Button popup_ok_btn = (Button) layout.findViewById(R.id.popup_btn_ok);
+//        // Create the popup window
+//        final PopupWindow popup = new PopupWindow(context);
+//        popup.setContentView(layout);
+//        popup.setWidth(600);
+//        popup.setHeight(600);
+//        popup.setFocusable(true);
+//
+//        // Displaying the popup centralized
+//        //To avoid BadTokenException, you need to defer showing the popup until after all the lifecycle methods are called (-> activity window is displayed):
+//        layout.post(new Runnable() {
+//            public void run() {
+//                popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+//            }
+//        });
+//
+//        popup_ok_btn.setOnClickListener(new Button.OnClickListener() {
+//            public void onClick(View v) {
+//                popup.dismiss();
+//            }
+//        });
+//    }
 
     //Some errors, maybe incorrect usage of getAllStories function, or lack of database in emulator.
     //Get list of story using database functions, show the stories or tip if none
     public void get_story_list() {
         StoriesDataSource sds = new StoriesDataSource(this);
         sds.open();
-        List<Story> story_list = sds.getAllStories();
+        stories = sds.getAllStories();
         sds.close();
-        Log.d("SP", story_list.toString());
+        Log.d("SP", stories.toString());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-
+            StoriesDataSource storiesDataSource = new StoriesDataSource(this);
+            Story newStory;
             switch(requestCode) {
 
-                case REQUEST_PICK_FILE:
+                case ADD_STORY:
 
-                    if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+                    Story story = (Story) data.getParcelableExtra("story");
 
-                        selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
-                        Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
+                    storiesDataSource.open();
+                    newStory = storiesDataSource.createStory(story);
+                    storiesDataSource.close();
+                    stories.add(newStory);
+                    adapter.notifyDataSetChanged();
+                    break;
+                case EDIT_STORY:
 
-                        Log.d( "external path", Environment.getExternalStorageDirectory().getAbsolutePath() );
-                        Log.d( "selected file", selectedFile.getPath() );
-
-                        // gather your request parameters
-                        File myFile = new File( selectedFile.getPath().toString() );
-
-                        if ( myFile.exists() ) {
-                            RequestParams params = new RequestParams();
-                            try {
-                                params.put("profile_picture", myFile, "application/octet-stream");
-                            } catch(FileNotFoundException e) {}
-
-                            // send request
-                            AsyncHttpClient client = new AsyncHttpClient();
-                            client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                                    Toast.makeText(getApplicationContext(), "in success", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                                    Toast.makeText(getApplicationContext(), throwable.getMessage().toString(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    Story editStory = (Story) data.getParcelableExtra("story");
+                    editStory.setStory_id(editingStory.getStory_id());
+                    storiesDataSource.open();
+                    newStory = storiesDataSource.updateStory(editStory);
+                    storiesDataSource.close();
+                    stories.remove(editingStory);
+                    stories.add(newStory);
+                    adapter.notifyDataSetChanged();
                     break;
             }
         }
-
     }
 }

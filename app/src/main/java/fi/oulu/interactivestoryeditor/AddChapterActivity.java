@@ -1,7 +1,9 @@
 package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -185,14 +188,14 @@ public class AddChapterActivity extends Activity {
         btn_add_interaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: button to create interaction or edit previous interaction
                 if(interaction!= null)
                 {
-                    //Previous value exists
+                    //TODO: edit interaction
+                    showInteractionDialog();
                 }
                 else
                 {
-                    
+                    showInteractionDialog();
                 }
             }
         });
@@ -372,5 +375,54 @@ public class AddChapterActivity extends Activity {
         }
     }
 
+
+    private void showInteractionDialog()
+    {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                AddChapterActivity.this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle("Select One Name:-");
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                AddChapterActivity.this,
+                android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.add("GPS");
+        arrayAdapter.add("NFC");
+        arrayAdapter.add("QR Code");
+        arrayAdapter.add("Quiz");
+        arrayAdapter.add("Spell Check");
+        builderSingle.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                AddChapterActivity.this);
+                        builderInner.setMessage(strName);
+                        builderInner.setTitle("Your Selected Interaction  is");
+                        builderInner.setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builderInner.show();
+                    }
+                });
+        builderSingle.show();
+    }
 
 }
