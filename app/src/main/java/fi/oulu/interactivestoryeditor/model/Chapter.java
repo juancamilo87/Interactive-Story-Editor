@@ -11,6 +11,7 @@ public class Chapter {
     private String videoUrl;
     private String audioUrl;
     private Interaction interaction;
+    private long chapter_id;
 
     public Chapter() {
     }
@@ -21,6 +22,16 @@ public class Chapter {
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
         this.audioUrl = audioUrl;
+        chapter_id = -1;
+    }
+
+    public Chapter(String title, String text, String imageUrl, String videoUrl, String audioUrl, long chapter_id) {
+        this.title = title;
+        this.text = text;
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
+        this.audioUrl = audioUrl;
+        this.chapter_id = chapter_id;
     }
 
     public String getTitle() {
@@ -69,5 +80,9 @@ public class Chapter {
 
     public void setInteraction(Interaction interaction) {
         this.interaction = interaction;
+    }
+
+    public long getChapter_id(){
+        return chapter_id;
     }
 }

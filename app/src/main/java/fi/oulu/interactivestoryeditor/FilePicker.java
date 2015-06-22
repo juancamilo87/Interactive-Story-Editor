@@ -113,7 +113,7 @@ public class FilePicker extends ListActivity {
             refreshFilesList();
             return;
         }
-
+        setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
 

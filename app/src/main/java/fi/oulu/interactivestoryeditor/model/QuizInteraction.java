@@ -13,10 +13,21 @@ public class QuizInteraction extends Interaction {
     private String answer4;
 
     public QuizInteraction() {
+        super();
     }
 
-    public QuizInteraction(String interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4) {
+    public QuizInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4) {
         super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl);
+        this.question = question;
+        this.correctAnswer = correctAnswer;
+        this.answer1 = answer1;
+        this.answer2 = answer2;
+        this.answer3 = answer3;
+        this.answer4 = answer4;
+    }
+
+    public QuizInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4, long interaction_id) {
+        super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl, interaction_id);
         this.question = question;
         this.correctAnswer = correctAnswer;
         this.answer1 = answer1;

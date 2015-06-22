@@ -51,7 +51,7 @@ public class MainMenuActivity extends Activity {
         //setContentView(R.layout.activity_main_menu);
         setContentView(R.layout.activity_show_story_list);
         Log.d("SP", "Test log works?");
-        //get_story_list();
+        get_story_list();
         showPopup(MainMenuActivity.this);
 
         Button uploadBtn = (Button)findViewById(R.id.upload_file);
@@ -99,8 +99,9 @@ public class MainMenuActivity extends Activity {
     //Get list of story using database functions, show the stories or tip if none
     public void get_story_list() {
         StoriesDataSource sds = new StoriesDataSource(this);
-        List<Story> story_list = new ArrayList<Story>();
-        story_list = sds.getAllStories();
+        sds.open();
+        List<Story> story_list = sds.getAllStories();
+        sds.close();
         Log.d("SP", story_list.toString());
     }
 
