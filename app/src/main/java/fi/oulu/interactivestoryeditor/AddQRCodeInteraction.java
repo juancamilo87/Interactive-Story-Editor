@@ -2,12 +2,15 @@ package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -17,7 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 
 public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
@@ -33,8 +36,9 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         button1.setOnClickListener(this);
         save_button.setOnClickListener(this);
 
-    }
 
+    }
+    private static final int SELECTED_PICTURE=1;
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -63,9 +67,10 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
                         smallerDimension);
                 try {
                     Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
-                    ImageView myImage = (ImageView) findViewById(R.id.imageView1);
+                    MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "qrcode" , "qrcode");
+                    ImageView myImage = (ImageView) findViewById(R.id.qrimage);
+                    myImage.setOnClickListener(this);
                     myImage.setImageBitmap(bitmap);
-
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }
@@ -73,9 +78,33 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
             // More buttons go here (if any) ...
             case R.id.qr_btn_save:
-                Toast.makeText(getApplicationContext(), "QR code has been saved", Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, SELECTED_PICTURE);
                 break;
         }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case SELECTED_PICTURE:
+                if(resultCode==RESULT_OK){
+                    Uri uri=data.getData();
+                    Intent intentSend = new Intent(Intent.ACTION_SEND);
+                    intentSend.setType("image/*");
+                    intentSend.putExtra(Intent.EXTRA_STREAM, uri);
+                    Intent chooser = Intent.createChooser(intentSend, "Send qr");
+                    startActivity(chooser);
+                }
+                break;
+
+            default:
+                break;
+        }
+
     }
 
 }
