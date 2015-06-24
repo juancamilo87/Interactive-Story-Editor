@@ -67,7 +67,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
                         smallerDimension);
                 try {
                     Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
-                    MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "qrcode" , "qrcode");
+                    MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "qrcode" , "myqrcode");
                     ImageView myImage = (ImageView) findViewById(R.id.qrimage);
                     myImage.setOnClickListener(this);
                     myImage.setImageBitmap(bitmap);
