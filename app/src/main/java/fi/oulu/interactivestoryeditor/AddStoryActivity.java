@@ -218,7 +218,6 @@ public class AddStoryActivity extends Activity {
                     chapter = (Chapter) data.getSerializableExtra("chapter");
                     chapters.add(chapter);
                     arrayAdapter.notifyDataSetChanged();
-
                     break;
 
                 case EDIT_CHAPTER:

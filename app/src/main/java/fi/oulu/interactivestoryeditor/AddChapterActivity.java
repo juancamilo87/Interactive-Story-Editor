@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -28,7 +30,11 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 import fi.oulu.interactivestoryeditor.model.Chapter;
+import fi.oulu.interactivestoryeditor.model.GPSInteraction;
 import fi.oulu.interactivestoryeditor.model.Interaction;
+import fi.oulu.interactivestoryeditor.model.NFCInteraction;
+import fi.oulu.interactivestoryeditor.model.QRCodeInteraction;
+import fi.oulu.interactivestoryeditor.model.QuizInteraction;
 
 
 public class AddChapterActivity extends Activity {
@@ -191,8 +197,7 @@ public class AddChapterActivity extends Activity {
             public void onClick(View v) {
                 if(interaction!= null)
                 {
-                    //TODO: edit interaction
-                    showInteractionDialog();
+                    showEditInteractionDialog();
                 }
                 else
                 {
@@ -356,14 +361,16 @@ public class AddChapterActivity extends Activity {
                     break;
 
                 case ADD_INTERACTION:
-
-                    //TODO: Interaction gotten from startactivityforresult
+                    interaction = (Interaction) data.getSerializableExtra("interaction");
+                    btn_add_interaction.setText("Edit Interaction");
                     break;
             }
         }
         else {
             switch (requestCode) {
                 case ADD_INTERACTION:
+                    interaction = null;
+                    btn_add_interaction.setText("Add Interaction");
                     break;
                 case REQUEST_IMAGE_FILE:
                     image_uploading = false;
@@ -395,24 +402,16 @@ public class AddChapterActivity extends Activity {
     {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                 AddChapterActivity.this);
-        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Select One Name:-");
+        LayoutInflater inflater = getLayoutInflater();
+        builderSingle.setCustomTitle(inflater.inflate(R.layout.add_interaction_title, null));
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 AddChapterActivity.this,
-                android.R.layout.select_dialog_singlechoice);
+                R.layout.list_cell);
         arrayAdapter.add("GPS");
         arrayAdapter.add("NFC");
         arrayAdapter.add("QR Code");
         arrayAdapter.add("Quiz");
         arrayAdapter.add("Spell Check");
-        builderSingle.setNegativeButton("cancel",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
 
         builderSingle.setAdapter(arrayAdapter,
                 new DialogInterface.OnClickListener() {
@@ -420,21 +419,84 @@ public class AddChapterActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String strName = arrayAdapter.getItem(which);
-                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
-                                AddChapterActivity.this);
-                        builderInner.setMessage(strName);
-                        builderInner.setTitle("Your Selected Interaction  is");
-                        builderInner.setPositiveButton("Ok",
-                                new DialogInterface.OnClickListener() {
+                        Intent intent;
+                        switch (strName)
+                        {
+                            case "GPS":
+                                intent = new Intent(context, AddGPSInteraction.class);
+                                break;
+                            case "NFC":
+                                intent = new Intent(context, AddNFCInteraction.class);
+                                break;
+                            case "QR Code":
+                                intent = new Intent(context, AddQRCodeInteraction.class);
+                                break;
+                            case "Quiz":
+                                intent = new Intent(context, AddQuizInteraction.class);
+                                break;
+                            case "Spell Check":
+                                intent = new Intent(context, AddSpellCheckInteraction.class);
+                                break;
+                            default:
+                                intent = new Intent();
+                                break;
+                        }
+                        startActivityForResult(intent,ADD_INTERACTION);
+                        dialog.dismiss();
+                    }
+                });
+        builderSingle.show();
+    }
 
-                                    @Override
-                                    public void onClick(
-                                            DialogInterface dialog,
-                                            int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        builderInner.show();
+    private void showEditInteractionDialog()
+    {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                AddChapterActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        builderSingle.setCustomTitle(inflater.inflate(R.layout.edit_interaction_title, null));
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                AddChapterActivity.this,
+                R.layout.list_cell);
+
+        arrayAdapter.add("Edit " + interaction.getStringType() + " interaction");
+        arrayAdapter.add("Discard and create new");
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+
+                        if (strName.equals("Discard and create new")) {
+                            dialog.dismiss();
+                            showInteractionDialog();
+                        } else {
+                            Intent intent;
+                            switch (strName)
+                            {
+                                case "GPS":
+                                    intent = new Intent(context, AddGPSInteraction.class);
+                                    break;
+                                case "NFC":
+                                    intent = new Intent(context, AddNFCInteraction.class);
+                                    break;
+                                case "QR Code":
+                                    intent = new Intent(context, AddQRCodeInteraction.class);
+                                    break;
+                                case "Quiz":
+                                    intent = new Intent(context, AddQuizInteraction.class);
+                                    break;
+                                case "Spell Check":
+                                    intent = new Intent(context, AddSpellCheckInteraction.class);
+                                    break;
+                                default:
+                                    intent = new Intent();
+                                    break;
+                            }
+                            intent.putExtra("old_interaction",interaction);
+                            startActivityForResult(intent,ADD_INTERACTION);
+                        }
                     }
                 });
         builderSingle.show();

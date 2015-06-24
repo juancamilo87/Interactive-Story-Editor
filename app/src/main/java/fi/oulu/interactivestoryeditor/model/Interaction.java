@@ -97,4 +97,22 @@ public class Interaction implements Serializable{
     {
         return interaction_id;
     }
+
+    public String getStringType()
+    {
+        switch (interactionType)
+        {
+            case GPS_INTERACTION:
+                return "GPS";
+            case NFC_INTERACTION:
+                return "NFC";
+            case QR_INTERACTION:
+                return "QR Code";
+            case QUIZ_INTERACTION:
+                return "Quiz";
+            case SPELL_INTERACTION:
+                return "Spell Check";
+        }
+        return null;
+    }
 }

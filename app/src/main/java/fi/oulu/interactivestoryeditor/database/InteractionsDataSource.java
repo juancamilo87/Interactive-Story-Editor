@@ -210,10 +210,10 @@ public class InteractionsDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
             otherCursor.moveToFirst();
             GPSInteraction newInteraction = cursorToGPSInteraction(otherCursor);
             otherCursor.close();
@@ -295,10 +295,10 @@ public class InteractionsDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
             otherCursor.moveToFirst();
             NFCInteraction newInteraction = cursorToNFCInteraction(otherCursor);
             otherCursor.close();
@@ -380,10 +380,10 @@ public class InteractionsDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
             otherCursor.moveToFirst();
             QRCodeInteraction newInteraction = cursorToQRCodeInteraction(otherCursor);
             otherCursor.close();
@@ -475,10 +475,10 @@ public class InteractionsDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
             otherCursor.moveToFirst();
             QuizInteraction newInteraction = cursorToQuizInteraction(otherCursor);
             otherCursor.close();
@@ -559,10 +559,10 @@ public class InteractionsDataSource {
             }
 
             String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            long insertId = database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + insertId, null, null, null, null);
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
             otherCursor.moveToFirst();
             SpellCheckInteraction newInteraction = cursorToSpellCheckInteraction(otherCursor);
             otherCursor.close();
