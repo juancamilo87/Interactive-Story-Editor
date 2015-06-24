@@ -6,58 +6,70 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import android.app.ListActivity;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FilePicker extends ListActivity {
+public class FilePicker extends Activity {
 
     public final static String EXTRA_FILE_PATH = "file_path";
     public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
     public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
-    private final static String DEFAULT_INITIAL_DIRECTORY = "/";
+    private final static String DEFAULT_INITIAL_DIRECTORY = "/sdcard/";
 
-    protected File Directory;
-    protected ArrayList<File> Files;
-    protected FilePickerListAdapter Adapter;
+    protected File directory;
+    protected ArrayList<File> files;
+    protected FilePickerListAdapter adapter;
     protected boolean ShowHiddenFiles = false;
     protected String[] acceptedFileExtensions;
+
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LayoutInflater inflator = (LayoutInflater)
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        setContentView(R.layout.activity_file_chooser);
 
-        View emptyView = inflator.inflate(R.layout.empty_view, null);
-        ((ViewGroup) getListView().getParent()).addView(emptyView);
-        getListView().setEmptyView(emptyView);
+        listView = (ListView) findViewById(R.id.file_list);
+        listView.setEmptyView(findViewById(R.id.file_empty_view));
 
+        ImageButton btn = (ImageButton) findViewById(R.id.file_back_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
         // Set initial directory
-        Directory = new File(DEFAULT_INITIAL_DIRECTORY);
+        directory = Environment.getExternalStorageDirectory();
 
         // Initialize the ArrayList
-        Files = new ArrayList<File>();
+        files = new ArrayList<File>();
 
         // Set the ListAdapter
-        Adapter = new FilePickerListAdapter(this, Files);
-        setListAdapter(Adapter);
+        adapter = new FilePickerListAdapter(this, files);
+        listView.setAdapter(adapter);
 
         // Initialize the extensions array to allow any file extensions
         acceptedFileExtensions = new String[] {};
 
         // Get intent extras
         if(getIntent().hasExtra(EXTRA_FILE_PATH))
-            Directory = new File(getIntent().getStringExtra(EXTRA_FILE_PATH));
+            directory = new File(getIntent().getStringExtra(EXTRA_FILE_PATH));
 
         if(getIntent().hasExtra(EXTRA_SHOW_HIDDEN_FILES))
             ShowHiddenFiles = getIntent().getBooleanExtra(EXTRA_SHOW_HIDDEN_FILES, false);
@@ -70,6 +82,28 @@ public class FilePicker extends ListActivity {
             acceptedFileExtensions = (String[])
                     collection.toArray(new String[collection.size()]);
         }
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                File newFile = (File)adapter.getItem(i);
+
+                if(newFile.isFile()) {
+
+                    Intent extra = new Intent();
+                    extra.putExtra(EXTRA_FILE_PATH, newFile.getAbsolutePath());
+                    setResult(RESULT_OK, extra);
+                    finish();
+                }
+                else {
+
+                    directory = newFile;
+                    refreshFilesList();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -80,11 +114,11 @@ public class FilePicker extends ListActivity {
 
     protected void refreshFilesList() {
 
-        Files.clear();
+        files.clear();
         ExtensionFilenameFilter filter =
                 new ExtensionFilenameFilter(acceptedFileExtensions);
 
-        File[] files = Directory.listFiles(filter);
+        File[] files = directory.listFiles(filter);
 
         if(files != null && files.length > 0) {
 
@@ -95,47 +129,26 @@ public class FilePicker extends ListActivity {
                     continue;
                 }
 
-                Files.add(f);
+                this.files.add(f);
             }
 
-            Collections.sort(Files, new FileComparator());
+            Collections.sort(this.files, new FileComparator());
         }
 
-        Adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onBackPressed() {
 
-        if(Directory.getParentFile() != null) {
+        if(directory.getParentFile() != null) {
 
-            Directory = Directory.getParentFile();
+            directory = directory.getParentFile();
             refreshFilesList();
             return;
         }
         setResult(RESULT_CANCELED);
         super.onBackPressed();
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-
-        File newFile = (File)l.getItemAtPosition(position);
-
-        if(newFile.isFile()) {
-
-            Intent extra = new Intent();
-            extra.putExtra(EXTRA_FILE_PATH, newFile.getAbsolutePath());
-            setResult(RESULT_OK, extra);
-            finish();
-        }
-        else {
-
-            Directory = newFile;
-            refreshFilesList();
-        }
-
-        super.onListItemClick(l, v, position, id);
     }
 
     private class FilePickerListAdapter extends ArrayAdapter<File> {
@@ -144,7 +157,7 @@ public class FilePicker extends ListActivity {
 
         public FilePickerListAdapter(Context context, List<File> objects) {
 
-            super(context, R.layout.list_item, android.R.id.text1, objects);
+            super(context, R.layout.list_item, objects);
             mObjects = objects;
         }
 
@@ -169,10 +182,57 @@ public class FilePicker extends ListActivity {
             TextView textView = (TextView)row.findViewById(R.id.file_picker_text);
             textView.setSingleLine(true);
             textView.setText(object.getName());
-
             if(object.isFile())
-                imageView.setImageResource(R.drawable.file);
-
+            {
+                String fileName = object.getName();
+                String fileNameArray[] = fileName.split("\\.");
+                String extension = fileNameArray[fileNameArray.length-1];
+                switch (extension)
+                {
+                    case "aif":
+                    case "iff":
+                    case "m3u":
+                    case "m4a":
+                    case "mid":
+                    case "mp3":
+                    case "mpa":
+                    case "ra":
+                    case "wav":
+                    case "wma":
+                        imageView.setImageResource(R.drawable.audio);
+                        break;
+                    case "3g2":
+                    case "3gp":
+                    case "asf":
+                    case "asx":
+                    case "avi":
+                    case "flv":
+                    case "mov":
+                    case "mp4":
+                    case "mpg":
+                    case "rm":
+                    case "swf":
+                    case "vob":
+                    case "wmv":
+                        imageView.setImageResource(R.drawable.video);
+                        break;
+                    case "bmp":
+                    case "gif":
+                    case "jpg":
+                    case "jpef":
+                    case "png":
+                    case "psd":
+                    case "pspimage":
+                    case "thm":
+                    case "tif":
+                    case "yuv":
+                        imageView.setImageResource(R.drawable.image);
+                        break;
+                    default:
+                        imageView.setImageResource(R.drawable.file);
+                        break;
+                }
+            }
             else
                 imageView.setImageResource(R.drawable.folder);
 

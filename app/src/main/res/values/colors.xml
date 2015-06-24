@@ -4,4 +4,7 @@
     <color name="theme_blue">#ff518bba</color>
     <color name="other_blue">#ff518bba</color>
 
+    <color name="lighter_gray">#ffc1c1c1</color>
+    <color name="darker_gray">#ff4b4b4b</color>
+
 </resources>

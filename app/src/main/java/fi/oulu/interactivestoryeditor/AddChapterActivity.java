@@ -238,7 +238,7 @@ public class AddChapterActivity extends Activity {
             switch(requestCode) {
 
                 case REQUEST_IMAGE_FILE:
-
+                    Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
                     if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
 
                         final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
@@ -279,7 +279,7 @@ public class AddChapterActivity extends Activity {
                     break;
 
                 case REQUEST_VIDEO_FILE:
-
+                    Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
                     if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
 
                         final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
@@ -320,7 +320,7 @@ public class AddChapterActivity extends Activity {
                     break;
 
                 case REQUEST_AUDIO_FILE:
-
+                    Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
                     if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
 
                         final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
@@ -369,16 +369,20 @@ public class AddChapterActivity extends Activity {
         else {
             switch (requestCode) {
                 case ADD_INTERACTION:
+                    Toast.makeText(context,"No interaction added",Toast.LENGTH_SHORT).show();
                     interaction = null;
                     btn_add_interaction.setText("Add Interaction");
                     break;
                 case REQUEST_IMAGE_FILE:
+                    Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
                     image_uploading = false;
                     break;
                 case REQUEST_AUDIO_FILE:
+                    Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
                     audio_uploading = false;
                     break;
                 case REQUEST_VIDEO_FILE:
+                    Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
                     video_uploading = false;
                     break;
             }
