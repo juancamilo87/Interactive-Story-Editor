@@ -27,6 +27,8 @@ public class AddQuizInteraction extends Activity {
     private EditText instruct_edt;
     private EditText positive_feed_edt;
     private EditText negative_feed_edt;
+    private EditText pos_url_feed_edt;
+    private EditText neg_url_feed_edt;
     private Button btn_save;
 
     private String question;
@@ -38,6 +40,8 @@ public class AddQuizInteraction extends Activity {
     private String instruct;
     private String pos_feed;
     private String neg_feed;
+    private String pos_feed_url;
+    private String neg_feed_url;
 
 
     @Override
@@ -54,6 +58,8 @@ public class AddQuizInteraction extends Activity {
         instruct_edt = (EditText) findViewById(R.id.instructions_edt);
         positive_feed_edt = (EditText) findViewById(R.id.positive_feed_edt);
         negative_feed_edt = (EditText) findViewById(R.id.negative_feed_edt);
+        pos_url_feed_edt= (EditText) findViewById(R.id.positive_feed_url_edt);
+        neg_url_feed_edt = (EditText) findViewById(R.id.negative_feed_url_edt);
         btn_save = (Button) findViewById(R.id.quiz_btn_save);
 
         question = question_edt.getText().toString();
@@ -65,6 +71,8 @@ public class AddQuizInteraction extends Activity {
         instruct = instruct_edt.getText().toString();
         pos_feed = positive_feed_edt.getText().toString();
         neg_feed = negative_feed_edt.getText().toString();
+        pos_feed_url = pos_url_feed_edt.getText().toString();
+        neg_feed_url = neg_url_feed_edt.getText().toString();
 
         btn_save.setOnClickListener(new View.OnClickListener(){
 
@@ -81,6 +89,8 @@ public class AddQuizInteraction extends Activity {
                     quizInteraction.setInstructions(instruct);
                     quizInteraction.setNegativeTextFeedback(neg_feed);
                     quizInteraction.setPositiveTextFeedback(pos_feed);
+                    quizInteraction.setNegativeAudioFeedbackUrl(neg_feed_url);
+                    quizInteraction.setPositiveAudioFeedbackUrl(pos_feed_url);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("quiz interaction", (Serializable) quizInteraction);
                     setResult(RESULT_OK, returnIntent);
@@ -174,6 +184,24 @@ public class AddQuizInteraction extends Activity {
         if(!negative_feed_edt.getText().toString().trim().equals(""))
         {
             neg_feed = negative_feed_edt.getText().toString().trim();
+        }
+        else
+        {
+            return false;
+        }
+
+        if(!neg_url_feed_edt.getText().toString().trim().equals(""))
+        {
+            neg_feed_url = neg_url_feed_edt.getText().toString().trim();
+        }
+        else
+        {
+            return false;
+        }
+
+        if(!pos_url_feed_edt.getText().toString().trim().equals(""))
+        {
+            pos_feed_url = pos_url_feed_edt.getText().toString().trim();
         }
         else
         {
