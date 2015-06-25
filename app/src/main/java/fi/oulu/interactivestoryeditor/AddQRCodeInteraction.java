@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 public class AddQRCodeInteraction extends Activity implements OnClickListener{
@@ -32,11 +33,11 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         setContentView(R.layout.activity_add_qr_code_interaction);
 
         Button button1 = (Button) findViewById(R.id.qrcode);
-        Button save_button = (Button)findViewById(R.id.qr_btn_save);
+        Button share_button = (Button)findViewById(R.id.qr_share);
+        Button save_button = (Button)findViewById(R.id.qr__save);
         button1.setOnClickListener(this);
+        share_button.setOnClickListener(this);
         save_button.setOnClickListener(this);
-
-
     }
     private static final int SELECTED_PICTURE=1;
     public void onClick(View v) {
@@ -76,10 +77,15 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
                 }
                 break;
 
-            // More buttons go here (if any) ...
-            case R.id.qr_btn_save:
+            // Share QR code
+            case R.id.qr_share:
                 Intent i=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, SELECTED_PICTURE);
+                break;
+
+            // Save QR code to local db
+            case R.id.qr__save:
+                Toast.makeText(getApplicationContext(), "The QR code has been save!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
