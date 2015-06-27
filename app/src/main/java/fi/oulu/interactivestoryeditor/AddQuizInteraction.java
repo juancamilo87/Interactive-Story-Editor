@@ -83,7 +83,7 @@ public class AddQuizInteraction extends Activity {
 
         if(getIntent().getSerializableExtra("old_interaction")!= null) {
 
-            QuizInteraction quizInteraction = new QuizInteraction();
+            QuizInteraction quizInteraction = (QuizInteraction) getIntent().getSerializableExtra("old_interaction");
             question_edt.setText(quizInteraction.getQuestion());
             ans1_edt.setText(quizInteraction.getAnswer1());
             ans2_edt.setText(quizInteraction.getAnswer2());
@@ -143,7 +143,7 @@ public class AddQuizInteraction extends Activity {
                             question, correct_ans, ans1, ans2, ans3, ans4);
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("quiz interaction", (Serializable) quizInt);
+                    returnIntent.putExtra("interaction", (Serializable) quizInt);
                     setResult(RESULT_OK, returnIntent);
                     finish();
                 } else {

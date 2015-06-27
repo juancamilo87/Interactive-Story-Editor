@@ -59,6 +59,9 @@ public class AddChapterActivity extends Activity {
     private String video_url;
     private String audio_url;
 
+    private long story_id;
+    private int chapter_number;
+
     private boolean image_uploading;
     private boolean video_uploading;
     private boolean audio_uploading;
@@ -207,6 +210,8 @@ public class AddChapterActivity extends Activity {
             }
         });
 
+        story_id = getIntent().getLongExtra("story_id",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number",-1);
     }
 
     private boolean verifyFields()
@@ -254,7 +259,7 @@ public class AddChapterActivity extends Activity {
                         if ( myFile.exists() ) {
                             RequestParams params = new RequestParams();
                             try {
-                                params.put("profile_picture", myFile, "application/octet-stream");
+                                params.put("file", myFile, "application/octet-stream");
                             } catch(FileNotFoundException e) {}
 
                             // send request
@@ -296,7 +301,7 @@ public class AddChapterActivity extends Activity {
                         if ( myFile.exists() ) {
                             RequestParams params = new RequestParams();
                             try {
-                                params.put("profile_picture", myFile, "application/octet-stream");
+                                params.put("file", myFile, "application/octet-stream");
                             } catch(FileNotFoundException e) {}
 
                             // send request
@@ -338,7 +343,7 @@ public class AddChapterActivity extends Activity {
                         if ( myFile.exists() ) {
                             RequestParams params = new RequestParams();
                             try {
-                                params.put("profile_picture", myFile, "application/octet-stream");
+                                params.put("file", myFile, "application/octet-stream");
                             } catch(FileNotFoundException e) {}
 
                             // send request
@@ -447,6 +452,8 @@ public class AddChapterActivity extends Activity {
                                 intent = new Intent();
                                 break;
                         }
+                        intent.putExtra("story_id",story_id);
+                        intent.putExtra("chapter_number",chapter_number);
                         startActivityForResult(intent,ADD_INTERACTION);
                         dialog.dismiss();
                     }
@@ -510,7 +517,8 @@ public class AddChapterActivity extends Activity {
                                     intent = new Intent();
                                     break;
                             }
-
+                            intent.putExtra("story_id",story_id);
+                            intent.putExtra("chapter_number",chapter_number);
                             startActivityForResult(intent,ADD_INTERACTION);
                         }
                     }

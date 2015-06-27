@@ -722,7 +722,7 @@ public class InteractionsDataSource {
         float latitude = cursor.getFloat(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_LATITUDE));
         float longitude = cursor.getFloat(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_LONGITUDE));
 
-        GPSInteraction interaction = new GPSInteraction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, latitude, longitude, id);
+        GPSInteraction interaction = new GPSInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, latitude, longitude, id);
         return interaction;
     }
 
@@ -738,7 +738,7 @@ public class InteractionsDataSource {
 
         String secret_code = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_SECRET_CODE));
 
-        NFCInteraction interaction = new NFCInteraction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, secret_code, id);
+        NFCInteraction interaction = new NFCInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, secret_code, id);
         return interaction;
     }
 
@@ -754,7 +754,7 @@ public class InteractionsDataSource {
 
         String secret_code = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_SECRET_CODE));
 
-        QRCodeInteraction interaction = new QRCodeInteraction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, secret_code, id);
+        QRCodeInteraction interaction = new QRCodeInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, secret_code, id);
         return interaction;
     }
 
@@ -775,7 +775,7 @@ public class InteractionsDataSource {
         String answer_3 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_3));
         String answer_4 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_4));
 
-        QuizInteraction interaction = new QuizInteraction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, question, correct_answer, answer_1, answer_2, answer_3, answer_4, id);
+        QuizInteraction interaction = new QuizInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, question, correct_answer, answer_1, answer_2, answer_3, answer_4, id);
         return interaction;
     }
 
@@ -791,7 +791,7 @@ public class InteractionsDataSource {
 
         String word = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_WORD));
 
-        SpellCheckInteraction interaction = new SpellCheckInteraction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, word, id);
+        SpellCheckInteraction interaction = new SpellCheckInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, word, id);
         return interaction;
     }
 

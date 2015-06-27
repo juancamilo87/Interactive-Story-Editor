@@ -2,6 +2,7 @@ package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -14,12 +15,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,6 +65,8 @@ public class AddStoryActivity extends Activity {
     private String author_lastname;
     private String author_website;
     private String author_email;
+
+    private long story_id;
 
     private Chapter editingChapter;
 
@@ -109,6 +123,11 @@ public class AddStoryActivity extends Activity {
                     chapters);
 
             chapters_list.setAdapter(arrayAdapter);
+            story_id = story.getStory_id();
+        }
+        else
+        {
+            getStoryId();
         }
 
         chapters_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,6 +136,8 @@ public class AddStoryActivity extends Activity {
                 editingChapter = arrayAdapter.getItem(i);
                 Intent intent = new Intent(getApplicationContext(), AddChapterActivity.class);
                 intent.putExtra("old_chapter", (Serializable) editingChapter);
+                intent.putExtra("story_id",story_id);
+                intent.putExtra("chapter_number",i+1);
                 startActivityForResult(intent, EDIT_CHAPTER);
             }
         });
@@ -131,8 +152,9 @@ public class AddStoryActivity extends Activity {
         btn_add_chapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), AddChapterActivity.class);
+                i.putExtra("story_id", story_id);
+                i.putExtra("chapter_number",chapters.size()+1);
                 startActivityForResult(i, ADD_CHAPTER);
             }
         });
@@ -154,6 +176,10 @@ public class AddStoryActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void getStoryId() {
+        new GetStoryIdTask().execute();
     }
 
     private boolean verifyFields()
@@ -235,5 +261,59 @@ public class AddStoryActivity extends Activity {
 
     }
 
+    private class GetStoryIdTask extends AsyncTask<Void, Void, String> {
+
+        protected String doInBackground(Void... params) {
+            String jsonResponse = null;
+
+            HttpClient client = new DefaultHttpClient();
+            String URL = "http://memoryhelper.netne.net/interactivestory/index.php/stories/create_new_story";
+
+            try
+            {
+                // Create Request to server and get response
+                StringBuilder builder = new StringBuilder();
+                HttpGet httpGet = new HttpGet(URL);
+
+                HttpResponse response = client.execute(httpGet);
+                StatusLine statusLine = response.getStatusLine();
+                int statusCode = statusLine.getStatusCode();
+                if (statusCode == 200) {
+                    HttpEntity entity = response.getEntity();
+                    InputStream content = entity.getContent();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(content));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line);
+                    }
+                    Log.v("Getter", "Your data: " + builder.toString());
+                    jsonResponse = builder.toString().split("divider")[0];
+                } else {
+                    Log.e("Getter", "Failed to download file");
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.e("Getter", "Failed"); //response data
+            }
+
+
+            return jsonResponse;
+        }
+
+        protected void onPostExecute(String result) {
+            try
+            {
+                JSONObject jObject = new JSONObject(result);
+                long id = jObject.getLong("data");
+                story_id = id;
+            }
+            catch(Exception e)
+            {
+                Log.e("JSON", "Failed"); //response data
+            }
+        }
+    }
 
 }
