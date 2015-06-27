@@ -243,4 +243,16 @@ public class AddQuizInteraction extends Activity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!positive_uploading&&!negative_uploading)
+        {
+            setResult(RESULT_CANCELED);
+            finish();
+        }else
+        {
+            Toast.makeText(this, "Please wait a moment till the files are finished uploading",Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
