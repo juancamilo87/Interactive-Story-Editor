@@ -1,11 +1,13 @@
 package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -17,6 +19,9 @@ import fi.oulu.interactivestoryeditor.model.Story;
 
 public class AddQuizInteraction extends Activity {
 
+    private static final int REQUEST_POSITIVE_FILE = 1;
+    private static final int REQUEST_NEGATIVE_FILE = 2;
+
     private EditText question_edt;
     private EditText ans1_edt;
     private EditText ans2_edt;
@@ -26,9 +31,10 @@ public class AddQuizInteraction extends Activity {
     private EditText instruct_edt;
     private EditText positive_feed_edt;
     private EditText negative_feed_edt;
-    private EditText pos_url_feed_edt;
-    private EditText neg_url_feed_edt;
     private Button btn_save;
+    private ImageButton btn_positive;
+    private ImageButton btn_negative;
+    private Context context;
 
     private String question;
     private String ans1;
@@ -41,6 +47,12 @@ public class AddQuizInteraction extends Activity {
     private String neg_feed;
     private String pos_feed_url;
     private String neg_feed_url;
+
+    private boolean old_positive;
+    private boolean old_negative;
+
+    private boolean positive_uploading;
+    private boolean negative_uploading;
 
 
     @Override
@@ -57,9 +69,15 @@ public class AddQuizInteraction extends Activity {
         instruct_edt = (EditText) findViewById(R.id.instructions_edt);
         positive_feed_edt = (EditText) findViewById(R.id.positive_feed_edt);
         negative_feed_edt = (EditText) findViewById(R.id.negative_feed_edt);
-        pos_url_feed_edt= (EditText) findViewById(R.id.positive_feed_url_edt);
-        neg_url_feed_edt = (EditText) findViewById(R.id.negative_feed_url_edt);
+        btn_positive= (ImageButton) findViewById(R.id.quiz_btn_positive);
+        btn_negative = (ImageButton) findViewById(R.id.quiz_btn_negative);
         btn_save = (Button) findViewById(R.id.quiz_btn_save);
+
+        old_positive = true;
+        old_negative = true;
+
+        positive_uploading = false;
+        negative_uploading = false;
 
         if(getIntent().getSerializableExtra("old_interaction")!= null) {
 
@@ -73,9 +91,45 @@ public class AddQuizInteraction extends Activity {
             instruct_edt.setText(quizInteraction.getInstructions());
             positive_feed_edt.setText(quizInteraction.getPositiveTextFeedback());
             negative_feed_edt.setText(quizInteraction.getNegativeTextFeedback());
-            pos_url_feed_edt.setText(quizInteraction.getPositiveAudioFeedbackUrl());
-            neg_url_feed_edt.setText(quizInteraction.getNegativeAudioFeedbackUrl());
+            pos_feed_url = quizInteraction.getPositiveAudioFeedbackUrl();
+            neg_feed_url = quizInteraction.getNegativeAudioFeedbackUrl();
         }
+
+        btn_positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pos_feed_url!=null && !pos_feed_url.equals("") && old_positive)
+                {
+                    Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
+                    old_positive = false;
+                }
+                else
+                {
+                    positive_uploading = true;
+                    Intent intent = new Intent(getApplicationContext(), FilePicker.class);
+                    startActivityForResult(intent, REQUEST_POSITIVE_FILE);
+                }
+
+            }
+        });
+
+        btn_negative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(neg_feed_url!=null && !neg_feed_url.equals("") && old_negative)
+                {
+                    Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
+                    old_negative = false;
+                } else
+                {
+                    negative_uploading = true;
+                    Intent intent = new Intent(getApplicationContext(), FilePicker.class);
+                    startActivityForResult(intent, REQUEST_NEGATIVE_FILE);
+                }
+
+            }
+        });
+
 
         btn_save.setOnClickListener(new View.OnClickListener(){
 
@@ -179,26 +233,7 @@ public class AddQuizInteraction extends Activity {
         {
             neg_feed = negative_feed_edt.getText().toString().trim();
         }
-        else
-        {
-            return false;
-        }
-
-        if(!neg_url_feed_edt.getText().toString().trim().equals(""))
-        {
-            neg_feed_url = neg_url_feed_edt.getText().toString().trim();
-        }
-        else
-        {
-            return false;
-        }
-
-        if(!pos_url_feed_edt.getText().toString().trim().equals(""))
-        {
-            pos_feed_url = pos_url_feed_edt.getText().toString().trim();
-        }
-        else
-        {
+        else {
             return false;
         }
 
