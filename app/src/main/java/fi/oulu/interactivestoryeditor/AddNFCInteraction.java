@@ -1,13 +1,21 @@
 package fi.oulu.interactivestoryeditor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -56,10 +64,18 @@ public class AddNFCInteraction extends Activity {
     private boolean positive_uploading;
     private boolean negative_uploading;
 
+    private IntentFilter[] mWriteTagFilters;
+    private PendingIntent mNfcPendingIntent;
+    private boolean silent=false;
+    private boolean writeProtect = false;
+
+    private NfcAdapter mNfcAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_nfc_interaction);
+
 
         context = this;
 
@@ -71,6 +87,24 @@ public class AddNFCInteraction extends Activity {
         btn_negative = (ImageButton) findViewById(R.id.nfc_btn_negative);
         edt_secret = (EditText) findViewById(R.id.nfc_input);
         btn_nfc_tag = (Button) findViewById(R.id.nfc_tag_btn);
+
+        mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
+        IntentFilter discovery = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
+        // Intent filters for writing to a tag
+        mWriteTagFilters = new IntentFilter[] { discovery };
+
+
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if(mNfcAdapter==null)
+        {
+            btn_nfc_tag.setEnabled(false);
+            Toast.makeText(context,"No NFC adapter. You can edit the interaction but not write the tag",Toast.LENGTH_SHORT).show();
+        }
 
         old_positive = true;
         old_negative = true;
@@ -139,8 +173,7 @@ public class AddNFCInteraction extends Activity {
                 {
                     Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
                     old_negative = false;
-                }
-                else
+                } else
                 {
                     negative_uploading = true;
                     Intent intent = new Intent(getApplicationContext(), FilePicker.class);
@@ -153,11 +186,33 @@ public class AddNFCInteraction extends Activity {
         btn_nfc_tag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!mNfcAdapter.isEnabled()) {
+                    //Enable NFC
+                    LayoutInflater inflater = getLayoutInflater();
+                    new AlertDialog.Builder(context)
+                            .setPositiveButton("Update Settings", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Intent setnfc = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                    startActivity(setnfc);
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                public void onCancel(DialogInterface dialog) {
+                                    Toast.makeText(context,"You have to enable NFC to be able to write the tag",Toast.LENGTH_SHORT).show();
+                                }
+                            }).create().show();
+                }
+                if (mNfcAdapter.isEnabled()) {
+                    mNfcAdapter.enableForegroundDispatch((AddNFCInteraction) context, mNfcPendingIntent, mWriteTagFilters, null);
+                }
+
                 //TODO: Write nfc tag, start a listener for tags, try to write the secret_message and remove the listener
                 //TODO: Limit lines of edt
             }
         });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
