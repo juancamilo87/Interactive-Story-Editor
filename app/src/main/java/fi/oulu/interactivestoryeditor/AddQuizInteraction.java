@@ -17,7 +17,6 @@ import fi.oulu.interactivestoryeditor.model.Story;
 
 public class AddQuizInteraction extends Activity {
 
-    private QuizInteraction quizInteraction;
     private EditText question_edt;
     private EditText ans1_edt;
     private EditText ans2_edt;
@@ -62,37 +61,32 @@ public class AddQuizInteraction extends Activity {
         neg_url_feed_edt = (EditText) findViewById(R.id.negative_feed_url_edt);
         btn_save = (Button) findViewById(R.id.quiz_btn_save);
 
-        question = question_edt.getText().toString();
-        ans1 = ans1_edt.getText().toString();
-        ans2 = ans2_edt.getText().toString();
-        ans3 = ans3_edt.getText().toString();
-        ans4 = ans4_edt.getText().toString();
-        correct_ans = correct_edt.getText().toString();
-        instruct = instruct_edt.getText().toString();
-        pos_feed = positive_feed_edt.getText().toString();
-        neg_feed = negative_feed_edt.getText().toString();
-        pos_feed_url = pos_url_feed_edt.getText().toString();
-        neg_feed_url = neg_url_feed_edt.getText().toString();
+        if(getIntent().getSerializableExtra("old_interaction")!= null) {
+
+            QuizInteraction quizInteraction = new QuizInteraction();
+            question_edt.setText(quizInteraction.getQuestion());
+            ans1_edt.setText(quizInteraction.getAnswer1());
+            ans2_edt.setText(quizInteraction.getAnswer2());
+            ans3_edt.setText(quizInteraction.getAnswer3());
+            ans4_edt.setText(quizInteraction.getAnswer4());
+            correct_edt.setText(quizInteraction.getCorrectAnswer());
+            instruct_edt.setText(quizInteraction.getInstructions());
+            positive_feed_edt.setText(quizInteraction.getPositiveTextFeedback());
+            negative_feed_edt.setText(quizInteraction.getNegativeTextFeedback());
+            pos_url_feed_edt.setText(quizInteraction.getPositiveAudioFeedbackUrl());
+            neg_url_feed_edt.setText(quizInteraction.getNegativeAudioFeedbackUrl());
+        }
 
         btn_save.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    quizInteraction = new QuizInteraction();
-                    quizInteraction.setQuestion(question);
-                    quizInteraction.setAnswer1(ans1);
-                    quizInteraction.setAnswer2(ans2);
-                    quizInteraction.setAnswer3(ans3);
-                    quizInteraction.setAnswer4(ans4);
-                    quizInteraction.setCorrectAnswer(correct_ans);
-                    quizInteraction.setInstructions(instruct);
-                    quizInteraction.setNegativeTextFeedback(neg_feed);
-                    quizInteraction.setPositiveTextFeedback(pos_feed);
-                    quizInteraction.setNegativeAudioFeedbackUrl(neg_feed_url);
-                    quizInteraction.setPositiveAudioFeedbackUrl(pos_feed_url);
+                    QuizInteraction quizInt = new QuizInteraction(1, instruct, pos_feed, neg_feed, pos_feed_url, neg_feed_url,
+                            question, correct_ans, ans1, ans2, ans3, ans4);
+
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("quiz interaction", (Serializable) quizInteraction);
+                    returnIntent.putExtra("quiz interaction", (Serializable) quizInt);
                     setResult(RESULT_OK, returnIntent);
                     finish();
                 } else {
