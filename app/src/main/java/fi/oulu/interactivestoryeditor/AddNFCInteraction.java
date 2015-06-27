@@ -212,7 +212,7 @@ public class AddNFCInteraction extends Activity {
         });
     }
 
-    onN
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
