@@ -4,15 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 
-import fi.oulu.interactivestoryeditor.model.QuizInteraction;
 import fi.oulu.interactivestoryeditor.model.SpellCheckInteraction;
 
 
@@ -31,9 +40,12 @@ public class AddSpellCheckInteraction extends Activity {
     private String instruct;
     private String pos_feed;
     private String neg_feed;
-    private String pos_feed_url;
-    private String neg_feed_url;
+    private String positive_url;
+    private String negative_url;
     private int interaction_type;
+
+    private long story_id;
+    private int chapter_number;
 
     private boolean old_positive;
     private boolean old_negative;
@@ -70,15 +82,15 @@ public class AddSpellCheckInteraction extends Activity {
             instruct_edt.setText(spellCheckInteraction.getInstructions());
             positive_feed_edt.setText(spellCheckInteraction.getPositiveTextFeedback());
             negative_feed_edt.setText(spellCheckInteraction.getNegativeTextFeedback());
-            pos_feed_url = spellCheckInteraction.getPositiveAudioFeedbackUrl();
-            neg_feed_url = spellCheckInteraction.getNegativeAudioFeedbackUrl();
+            positive_url = spellCheckInteraction.getPositiveAudioFeedbackUrl();
+            negative_url = spellCheckInteraction.getNegativeAudioFeedbackUrl();
             interaction_type = spellCheckInteraction.getInteractionType();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pos_feed_url!=null && !pos_feed_url.equals("") && old_positive)
+                if(positive_url !=null && !positive_url.equals("") && old_positive)
                 {
                     Toast.makeText(context, "A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
                     old_positive = false;
@@ -96,7 +108,7 @@ public class AddSpellCheckInteraction extends Activity {
         btn_negative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(neg_feed_url!=null && !neg_feed_url.equals("") && old_negative)
+                if(negative_url !=null && !negative_url.equals("") && old_negative)
                 {
                     Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
                     old_negative = false;
@@ -116,7 +128,7 @@ public class AddSpellCheckInteraction extends Activity {
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    SpellCheckInteraction spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, pos_feed_url, neg_feed_url, word);
+                    SpellCheckInteraction spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word);
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("quiz interaction", (Serializable) spCheckInt);
@@ -180,6 +192,106 @@ public class AddSpellCheckInteraction extends Activity {
         }else
         {
             Toast.makeText(this, "Please wait a moment till the files are finished uploading",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            String path;
+
+            switch(requestCode) {
+
+                case REQUEST_POSITIVE_FILE:
+                    Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
+                    path = "media/"+story_id+"/" + chapter_number + "/positive/";
+                    uploadFile(data, path, REQUEST_POSITIVE_FILE);
+                    break;
+
+                case REQUEST_NEGATIVE_FILE:
+                    Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
+                    path = "media/"+story_id+"/" + chapter_number + "/negative/";
+                    uploadFile(data, path, REQUEST_NEGATIVE_FILE);
+                    break;
+            }
+        }
+        else {
+            switch (requestCode) {
+                case REQUEST_POSITIVE_FILE:
+                    Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
+                    positive_uploading = false;
+                    break;
+                case REQUEST_NEGATIVE_FILE:
+                    Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
+                    negative_uploading = false;
+                    break;
+            }
+        }
+    }
+
+    private void uploadFile(Intent data, String path, final int label) {
+        if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+
+            final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
+            //Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
+
+            Log.d("external path", Environment.getExternalStorageDirectory().getAbsolutePath());
+            Log.d( "selected file", selectedFile.getPath() );
+
+            // gather your request parameters
+            File myFile = new File( selectedFile.getPath().toString() );
+
+            if ( myFile.exists() ) {
+                RequestParams params = new RequestParams();
+                try {
+                    params.put("profile_picture", myFile, "application/octet-stream");
+                    params.put("url",path);
+                } catch(FileNotFoundException e) {}
+
+                // send request
+                AsyncHttpClient client = new AsyncHttpClient();
+                client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                        uploadResult(true, label, "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                        uploadResult(false,label,"");
+                    }
+                });
+            } else {
+                uploadResult(false,label,"");
+                //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void uploadResult(boolean result, int label, String path) {
+        switch (label) {
+            case REQUEST_POSITIVE_FILE:
+                if (result) {
+                    positive_uploading = false;
+                    old_positive = true;
+                    positive_url = path;
+                    Toast.makeText(getApplicationContext(), "Positive audio file uploaded.", Toast.LENGTH_SHORT).show();
+                } else {
+                    positive_uploading = false;
+                    Toast.makeText(getApplicationContext(), "Error uploading positive audio file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_NEGATIVE_FILE:
+                if (result) {
+                    old_negative = true;
+                    negative_uploading = false;
+                    negative_url = path;
+                    Toast.makeText(getApplicationContext(), "Negative audio file uploaded.", Toast.LENGTH_SHORT).show();
+                } else {
+                    negative_uploading = false;
+                    Toast.makeText(getApplicationContext(), "Error uploading negative audio file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
