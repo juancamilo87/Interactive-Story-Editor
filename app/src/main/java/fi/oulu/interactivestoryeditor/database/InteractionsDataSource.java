@@ -797,15 +797,23 @@ public class InteractionsDataSource {
 
     private Interaction cursorToInteraction(Cursor cursor) {
 
-        long id = cursor.getLong(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ID));
         int type = cursor.getInt(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_TYPE));
-        String instructions = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_INSTRUCTIONS));
-        String positive_feedback = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_POSITIVE_FEEDBACK));
-        String negative_feedback = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_NEGATIVE_FEEDBACK));
-        String positive_url = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_POSITIVE_AUDIO_URL));
-        String negative_url = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_NEGATIVE_AUDIO_URL));
 
-        Interaction interaction = new Interaction(type, instructions, positive_feedback, negative_feedback, positive_url, negative_url, id);
-        return interaction;
+        switch (type)
+        {
+            case Interaction.GPS_INTERACTION:
+                return cursorToGPSInteraction(cursor);
+            case Interaction.NFC_INTERACTION:
+                return cursorToNFCInteraction(cursor);
+            case Interaction.QR_INTERACTION:
+                return cursorToQRCodeInteraction(cursor);
+            case Interaction.QUIZ_INTERACTION:
+                return cursorToQuizInteraction(cursor);
+            case Interaction.SPELL_INTERACTION:
+                return cursorToSpellCheckInteraction(cursor);
+            default:
+                return null;
+        }
+
     }
 }

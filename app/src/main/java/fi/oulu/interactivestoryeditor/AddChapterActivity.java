@@ -35,6 +35,7 @@ import fi.oulu.interactivestoryeditor.model.Interaction;
 import fi.oulu.interactivestoryeditor.model.NFCInteraction;
 import fi.oulu.interactivestoryeditor.model.QRCodeInteraction;
 import fi.oulu.interactivestoryeditor.model.QuizInteraction;
+import fi.oulu.interactivestoryeditor.model.SpellCheckInteraction;
 
 
 public class AddChapterActivity extends Activity {
@@ -262,6 +263,7 @@ public class AddChapterActivity extends Activity {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                                     image_uploading = false;
+                                    old_image = true;
                                     image_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
                                     Toast.makeText(getApplicationContext(), "Image file uploaded.", Toast.LENGTH_SHORT).show();
                                 }
@@ -302,6 +304,7 @@ public class AddChapterActivity extends Activity {
                             client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                                    old_video = true;
                                     video_uploading = false;
                                     video_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
                                     Toast.makeText(getApplicationContext(), "Video file uploaded.", Toast.LENGTH_SHORT).show();
@@ -344,6 +347,7 @@ public class AddChapterActivity extends Activity {
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                                     audio_uploading = false;
+                                    old_audio = true;
                                     audio_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
                                     Toast.makeText(getApplicationContext(), "Audio file uploaded.", Toast.LENGTH_SHORT).show();
                                 }
@@ -370,8 +374,6 @@ public class AddChapterActivity extends Activity {
             switch (requestCode) {
                 case ADD_INTERACTION:
                     Toast.makeText(context,"No interaction added",Toast.LENGTH_SHORT).show();
-                    interaction = null;
-                    btn_add_interaction.setText("Add Interaction");
                     break;
                 case REQUEST_IMAGE_FILE:
                     Toast.makeText(context,"No file chosen",Toast.LENGTH_SHORT).show();
@@ -477,28 +479,38 @@ public class AddChapterActivity extends Activity {
                             showInteractionDialog();
                         } else {
                             Intent intent;
-                            switch (strName)
+                            switch (interaction.getStringType())
                             {
                                 case "GPS":
                                     intent = new Intent(context, AddGPSInteraction.class);
+                                    GPSInteraction gpsInteraction = (GPSInteraction) interaction;
+                                    intent.putExtra("old_interaction",gpsInteraction);
                                     break;
                                 case "NFC":
                                     intent = new Intent(context, AddNFCInteraction.class);
+                                    NFCInteraction nfcInteraction = (NFCInteraction) interaction;
+                                    intent.putExtra("old_interaction",nfcInteraction);
                                     break;
                                 case "QR Code":
                                     intent = new Intent(context, AddQRCodeInteraction.class);
+                                    QRCodeInteraction qrCodeInteraction= (QRCodeInteraction) interaction;
+                                    intent.putExtra("old_interaction",qrCodeInteraction);
                                     break;
                                 case "Quiz":
                                     intent = new Intent(context, AddQuizInteraction.class);
+                                    QuizInteraction quizInteraction = (QuizInteraction) interaction;
+                                    intent.putExtra("old_interaction",quizInteraction);
                                     break;
                                 case "Spell Check":
                                     intent = new Intent(context, AddSpellCheckInteraction.class);
+                                    SpellCheckInteraction spellCheckInteraction = (SpellCheckInteraction) interaction;
+                                    intent.putExtra("old_interaction",spellCheckInteraction);
                                     break;
                                 default:
                                     intent = new Intent();
                                     break;
                             }
-                            intent.putExtra("old_interaction",interaction);
+
                             startActivityForResult(intent,ADD_INTERACTION);
                         }
                     }
