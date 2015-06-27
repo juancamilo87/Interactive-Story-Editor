@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import fi.oulu.interactivestoryeditor.model.Author;
+import fi.oulu.interactivestoryeditor.model.Interaction;
 import fi.oulu.interactivestoryeditor.model.QuizInteraction;
 import fi.oulu.interactivestoryeditor.model.Story;
 
@@ -47,6 +48,7 @@ public class AddQuizInteraction extends Activity {
     private String neg_feed;
     private String pos_feed_url;
     private String neg_feed_url;
+    private int interaction_type;
 
     private boolean old_positive;
     private boolean old_negative;
@@ -93,6 +95,7 @@ public class AddQuizInteraction extends Activity {
             negative_feed_edt.setText(quizInteraction.getNegativeTextFeedback());
             pos_feed_url = quizInteraction.getPositiveAudioFeedbackUrl();
             neg_feed_url = quizInteraction.getNegativeAudioFeedbackUrl();
+            interaction_type = quizInteraction.getInteractionType();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +139,7 @@ public class AddQuizInteraction extends Activity {
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    QuizInteraction quizInt = new QuizInteraction(1, instruct, pos_feed, neg_feed, pos_feed_url, neg_feed_url,
+                    QuizInteraction quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, pos_feed_url, neg_feed_url,
                             question, correct_ans, ans1, ans2, ans3, ans4);
 
                     Intent returnIntent = new Intent();
