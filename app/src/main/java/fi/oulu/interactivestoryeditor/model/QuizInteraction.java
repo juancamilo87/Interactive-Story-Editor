@@ -18,8 +18,8 @@ public class QuizInteraction extends Interaction implements Serializable{
         super();
     }
 
-    public QuizInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4) {
-        super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl);
+    public QuizInteraction(String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4) {
+        super(Interaction.QUIZ_INTERACTION, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl);
         this.question = question;
         this.correctAnswer = correctAnswer;
         this.answer1 = answer1;
@@ -28,8 +28,8 @@ public class QuizInteraction extends Interaction implements Serializable{
         this.answer4 = answer4;
     }
 
-    public QuizInteraction(int interactionType, String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4, long interaction_id) {
-        super(interactionType, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl, interaction_id);
+    public QuizInteraction(String instructions, String positiveTextFeedback, String negativeTextFeedback, String positiveAudioFeedbackUrl, String negativeAudioFeedbackUrl, String question, String correctAnswer, String answer1, String answer2, String answer3, String answer4, long interaction_id) {
+        super(Interaction.QUIZ_INTERACTION, instructions, positiveTextFeedback, negativeTextFeedback, positiveAudioFeedbackUrl, negativeAudioFeedbackUrl, interaction_id);
         this.question = question;
         this.correctAnswer = correctAnswer;
         this.answer1 = answer1;
