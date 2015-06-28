@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="@android:color/white">
+    <RelativeLayout
+        android:id="@+id/gps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Pick Location"
+            style="@style/TitleName"/>
+        <Button
+            android:id="@+id/gps_pick_btn"
+            android:text="Pick"
+            style="@style/SmallButton"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Latitude:"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="10dp"/>
+        <TextView
+            android:id="@+id/tv_latitude"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="10dp"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Longitude:"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="10dp"/>
+        <TextView
+            android:id="@+id/tv_longitude"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="10dp"/>
+
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fragment
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_place_white_48dp"
+            android:tint="@android:color/holo_red_light"/>
+    </RelativeLayout>
+
+</LinearLayout>
