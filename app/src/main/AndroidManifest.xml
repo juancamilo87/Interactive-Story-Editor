@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainMenuActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,33 +26,43 @@
         </activity>
         <activity
             android:name=".AddStoryActivity"
-            android:label="@string/title_activity_add_story" >
+            android:label="@string/title_activity_add_story"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddChapterActivity"
-            android:label="@string/title_activity_add_chapter" >
+            android:label="@string/title_activity_add_chapter"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddGPSInteraction"
-            android:label="@string/title_activity_add_gps_interaction" >
+            android:label="@string/title_activity_add_gps_interaction"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddNFCInteraction"
-            android:label="@string/title_activity_add_nfc_interaction" >
+            android:label="@string/title_activity_add_nfc_interaction"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddQRCodeInteraction"
-            android:label="@string/title_activity_add_qr_code_interaction" >
+            android:label="@string/title_activity_add_qr_code_interaction"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddQuizInteraction"
-            android:label="@string/title_activity_add_quiz_interaction" >
+            android:label="@string/title_activity_add_quiz_interaction"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".AddSpellCheckInteraction"
-            android:label="@string/title_activity_add_spell_check_interaction" >
+            android:label="@string/title_activity_add_spell_check_interaction"
+            android:windowSoftInputMode="stateHidden">
         </activity>
-        <activity android:name=".FilePicker"></activity>
+        <activity
+            android:name=".FilePicker"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
     </application>
 
 </manifest>

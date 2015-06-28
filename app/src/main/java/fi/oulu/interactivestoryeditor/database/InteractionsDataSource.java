@@ -729,7 +729,6 @@ public class InteractionsDataSource {
     private NFCInteraction cursorToNFCInteraction(Cursor cursor) {
 
         long id = cursor.getLong(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ID));
-        int type = cursor.getInt(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_TYPE));
         String instructions = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_INSTRUCTIONS));
         String positive_feedback = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_POSITIVE_FEEDBACK));
         String negative_feedback = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_NEGATIVE_FEEDBACK));

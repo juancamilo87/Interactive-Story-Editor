@@ -165,7 +165,7 @@ public class AddStoryActivity extends Activity {
             public void onClick(View view) {
                 if (verifyFields()) {
                     author = new Author(author_name,author_lastname,author_website,author_email);
-                    Story story = new Story(author, title, summary);
+                    Story story = new Story(author, title, summary, story_id);
                     story.setChapters(chapters);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("story", (Serializable) story);

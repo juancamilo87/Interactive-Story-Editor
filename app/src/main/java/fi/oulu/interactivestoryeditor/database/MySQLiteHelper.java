@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "stories.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String TABLE_STORIES = "stories";
     public static final String COLUMN_STORIES_ID = "_id";
@@ -23,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_STORIES = "create table "
             + TABLE_STORIES + "(" +
-            COLUMN_STORIES_ID + " integer primary key autoincrement, " +
+            COLUMN_STORIES_ID + " integer primary key, " +
             COLUMN_STORIES_NAME + " text not null, " +
             COLUMN_STORIES_LAST_NAME + " text, " +
             COLUMN_STORIES_WEBSITE + " text, " +

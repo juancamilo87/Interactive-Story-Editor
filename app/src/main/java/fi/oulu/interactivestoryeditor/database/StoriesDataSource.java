@@ -48,36 +48,34 @@ public class StoriesDataSource {
     }
 
     public Story createStory(Story story) {
-        if(story.getStory_id() != -1) {
-            return updateStory(story);
-        }
-        else {
-            ContentValues values = new ContentValues();
-            values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getName());
-            values.put(MySQLiteHelper.COLUMN_STORIES_LAST_NAME, story.getAuthor().getLast_name());
-            values.put(MySQLiteHelper.COLUMN_STORIES_WEBSITE, story.getAuthor().getWebsite());
-            values.put(MySQLiteHelper.COLUMN_STORIES_EMAIL, story.getAuthor().getEmail());
-            values.put(MySQLiteHelper.COLUMN_STORIES_TITLE, story.getTitle());
-            values.put(MySQLiteHelper.COLUMN_STORIES_SUMMARY, story.getSummary());
-            long insertId = database.insert(MySQLiteHelper.TABLE_STORIES, null,
-                    values);
-            Log.d("id", insertId+"");
-            Cursor cursor = database.query(MySQLiteHelper.TABLE_STORIES,
-                    allColumns, MySQLiteHelper.COLUMN_STORIES_ID + " = " + insertId, null,
-                    null, null, null);
-            cursor.moveToFirst();
-            Story newStory = cursorToStory(cursor);
 
-            ChaptersDataSource chaptersDataSource = new ChaptersDataSource(context);
-            chaptersDataSource.open();
-            for(int i = 0; i<story.getChapters().size(); i++)
-            {
-                newStory.addChapter(chaptersDataSource.createChapter(story.getChapters().get(i),insertId,i+1));
-            }
-            chaptersDataSource.close();
-            cursor.close();
-            return newStory;
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_STORIES_ID, story.getStory_id());
+        values.put(MySQLiteHelper.COLUMN_STORIES_NAME, story.getAuthor().getName());
+        values.put(MySQLiteHelper.COLUMN_STORIES_LAST_NAME, story.getAuthor().getLast_name());
+        values.put(MySQLiteHelper.COLUMN_STORIES_WEBSITE, story.getAuthor().getWebsite());
+        values.put(MySQLiteHelper.COLUMN_STORIES_EMAIL, story.getAuthor().getEmail());
+        values.put(MySQLiteHelper.COLUMN_STORIES_TITLE, story.getTitle());
+        values.put(MySQLiteHelper.COLUMN_STORIES_SUMMARY, story.getSummary());
+        long insertId = database.insert(MySQLiteHelper.TABLE_STORIES, null,
+                values);
+        Log.d("id", insertId+"");
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_STORIES,
+                allColumns, MySQLiteHelper.COLUMN_STORIES_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.moveToFirst();
+        Story newStory = cursorToStory(cursor);
+
+        ChaptersDataSource chaptersDataSource = new ChaptersDataSource(context);
+        chaptersDataSource.open();
+        for(int i = 0; i<story.getChapters().size(); i++)
+        {
+            newStory.addChapter(chaptersDataSource.createChapter(story.getChapters().get(i),insertId,i+1));
         }
+        chaptersDataSource.close();
+        cursor.close();
+        return newStory;
+
     }
 
     public void deleteStory(Story story) {

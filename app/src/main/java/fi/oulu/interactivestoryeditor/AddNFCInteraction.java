@@ -16,6 +16,7 @@ import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -34,7 +35,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -262,6 +262,12 @@ public class AddNFCInteraction extends Activity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mNfcAdapter.disableForegroundDispatch((Activity) context);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
 
         if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
@@ -316,7 +322,7 @@ public class AddNFCInteraction extends Activity {
         }
     }
 
-    private void uploadFile(Intent data, String path, final int label) {
+    private void uploadFile(Intent data, final String path, final int label) {
         if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
 
             final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
@@ -331,16 +337,24 @@ public class AddNFCInteraction extends Activity {
             if ( myFile.exists() ) {
                 RequestParams params = new RequestParams();
                 try {
-                    params.put("profile_picture", myFile, "application/octet-stream");
-                    params.put("url",path);
+                    params.put("file", myFile, RequestParams.APPLICATION_OCTET_STREAM);
+                    params.put("path",path);
+                    params.setContentEncoding("UTF-8");
+                    Log.d("Path", path);
+                    Log.d("File", selectedFile.getName());
                 } catch(FileNotFoundException e) {}
-
+                Log.d("params",params.toString());
                 // send request
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
+                client.post(
+                        "http://memoryhelper.netne.net/interactivestory/index.php/fileupload/upload_file",
+                        params,
+                        new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                        uploadResult(true, label, "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath());
+                        Log.d("status",statusCode+"");
+                        Log.d("bytes",new String(bytes));
+                        uploadResult(true, label, "http://memoryhelper.netne.net/interactivestory/" + path + selectedFile.getName());
                     }
 
                     @Override

@@ -240,133 +240,24 @@ public class AddChapterActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-
+            String path;
             switch(requestCode) {
-
                 case REQUEST_IMAGE_FILE:
                     Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
-                    if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
-
-                        final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
-                        //Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
-
-                        Log.d("external path", Environment.getExternalStorageDirectory().getAbsolutePath());
-                        Log.d( "selected file", selectedFile.getPath() );
-
-                        // gather your request parameters
-                        File myFile = new File( selectedFile.getPath().toString() );
-
-                        if ( myFile.exists() ) {
-                            RequestParams params = new RequestParams();
-                            try {
-                                params.put("file", myFile, "application/octet-stream");
-                            } catch(FileNotFoundException e) {}
-
-                            // send request
-                            AsyncHttpClient client = new AsyncHttpClient();
-                            client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                                    image_uploading = false;
-                                    old_image = true;
-                                    image_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
-                                    Toast.makeText(getApplicationContext(), "Image file uploaded.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                                    image_uploading = false;
-                                    Toast.makeText(getApplicationContext(), "Error uploading image file. Please try again.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    path = "media/"+story_id+"/" + chapter_number + "/image/";
+                    uploadFile(data, path, REQUEST_IMAGE_FILE);
                     break;
 
                 case REQUEST_VIDEO_FILE:
                     Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
-                    if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
-
-                        final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
-                        //Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
-
-                        Log.d("external path", Environment.getExternalStorageDirectory().getAbsolutePath());
-                        Log.d( "selected file", selectedFile.getPath() );
-
-                        // gather your request parameters
-                        File myFile = new File( selectedFile.getPath().toString() );
-
-                        if ( myFile.exists() ) {
-                            RequestParams params = new RequestParams();
-                            try {
-                                params.put("file", myFile, "application/octet-stream");
-                            } catch(FileNotFoundException e) {}
-
-                            // send request
-                            AsyncHttpClient client = new AsyncHttpClient();
-                            client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                                    old_video = true;
-                                    video_uploading = false;
-                                    video_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
-                                    Toast.makeText(getApplicationContext(), "Video file uploaded.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                                    video_uploading = false;
-                                    Toast.makeText(getApplicationContext(), "Error uploading video file. Please try again.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    path = "media/"+story_id+"/" + chapter_number + "/video/";
+                    uploadFile(data, path, REQUEST_VIDEO_FILE);
                     break;
 
                 case REQUEST_AUDIO_FILE:
                     Toast.makeText(context,"Uploading file",Toast.LENGTH_SHORT).show();
-                    if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
-
-                        final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
-                        //Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
-
-                        Log.d("external path", Environment.getExternalStorageDirectory().getAbsolutePath());
-                        Log.d( "selected file", selectedFile.getPath() );
-
-                        // gather your request parameters
-                        File myFile = new File( selectedFile.getPath().toString() );
-
-                        if ( myFile.exists() ) {
-                            RequestParams params = new RequestParams();
-                            try {
-                                params.put("file", myFile, "application/octet-stream");
-                            } catch(FileNotFoundException e) {}
-
-                            // send request
-                            AsyncHttpClient client = new AsyncHttpClient();
-                            client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                                    audio_uploading = false;
-                                    old_audio = true;
-                                    audio_url = "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath();
-                                    Toast.makeText(getApplicationContext(), "Audio file uploaded.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                                    audio_uploading = false;
-                                    Toast.makeText(getApplicationContext(), "Error uploading audio file. Please try again.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    path = "media/"+story_id+"/" + chapter_number + "/audio/";
+                    uploadFile(data, path, REQUEST_AUDIO_FILE);
                     break;
 
                 case ADD_INTERACTION:
@@ -395,6 +286,94 @@ public class AddChapterActivity extends Activity {
             }
         }
     }
+
+    private void uploadFile(Intent data, final String path, final int label) {
+        if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
+
+            final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
+            //Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
+
+            Log.d("external path", Environment.getExternalStorageDirectory().getAbsolutePath());
+            Log.d( "selected file", selectedFile.getPath() );
+
+            // gather your request parameters
+            File myFile = new File( selectedFile.getPath().toString() );
+
+            if ( myFile.exists() ) {
+                RequestParams params = new RequestParams();
+                try {
+                    params.put("file", myFile, RequestParams.APPLICATION_OCTET_STREAM);
+                    params.put("path",path);
+                    params.setContentEncoding("UTF-8");
+                    Log.d("Path", path);
+                    Log.d("File", selectedFile.getName());
+                } catch(FileNotFoundException e) {}
+                Log.d("params",params.toString());
+                // send request
+                AsyncHttpClient client = new AsyncHttpClient();
+                client.post(
+                        "http://memoryhelper.netne.net/interactivestory/index.php/fileupload/upload_file",
+                        params,
+                        new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                                Log.d("status",statusCode+"");
+                                Log.d("bytes",new String(bytes));
+                                uploadResult(true, label, "http://memoryhelper.netne.net/interactivestory/" + path + selectedFile.getName());
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                                uploadResult(false,label,"");
+                            }
+                        });
+            } else {
+                uploadResult(false,label,"");
+                //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void uploadResult(boolean result, int label, String path) {
+        switch (label) {
+            case REQUEST_IMAGE_FILE:
+                if (result) {
+                    image_uploading = false;
+                    old_image = true;
+                    image_url = path;
+                    Toast.makeText(getApplicationContext(), "Image file uploaded.", Toast.LENGTH_SHORT).show();
+                } else {
+                    image_uploading = false;
+                    Toast.makeText(getApplicationContext(), "Error uploading image file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_VIDEO_FILE:
+                if (result) {
+                    old_video = true;
+                    video_uploading = false;
+                    video_url = path;
+                    Toast.makeText(getApplicationContext(), "Video file uploaded.", Toast.LENGTH_SHORT).show();
+                } else {
+                    video_uploading = false;
+                    Toast.makeText(getApplicationContext(), "Error uploading video file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_AUDIO_FILE:
+                if (result) {
+                    audio_uploading = false;
+                    old_audio = true;
+                    audio_url = path;
+                    Toast.makeText(getApplicationContext(), "Audio file uploaded.", Toast.LENGTH_SHORT).show();
+                } else {
+                    audio_uploading = false;
+                    Toast.makeText(getApplicationContext(), "Error uploading audio file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
