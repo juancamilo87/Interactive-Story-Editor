@@ -33,12 +33,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 
-import fi.oulu.interactivestoryeditor.model.NFCInteraction;
 import fi.oulu.interactivestoryeditor.model.QRCodeInteraction;
 
 
 public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
+    private static final int SELECTED_PICTURE=1;
     private static final int REQUEST_POSITIVE_FILE = 2;
     private static final int REQUEST_NEGATIVE_FILE = 3;
 
@@ -77,7 +77,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_qr_code_interaction);
 
-        story_id = getIntent().getLongExtra("story_id",-1);
+        story_id = getIntent().getLongExtra("story_id", -1);
         chapter_number = getIntent().getIntExtra("chapter_number", -1);
 
         context = this;
@@ -95,8 +95,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         positive_uploading = false;
         negative_uploading = false;
 
-        if(getIntent().getSerializableExtra("old_interaction")!= null)
-        {
+        if (getIntent().getSerializableExtra("old_interaction") != null) {
             QRCodeInteraction interaction = (QRCodeInteraction) getIntent().getSerializableExtra("old_interaction");
 
             edt_instructions.setText(interaction.getInstructions());
@@ -111,13 +110,10 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         btn_positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(positive_url!=null && !positive_url.equals("") && old_positive)
-                {
-                    Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
+                if (positive_url != null && !positive_url.equals("") && old_positive) {
+                    Toast.makeText(context, "A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
                     old_positive = false;
-                }
-                else
-                {
+                } else {
                     positive_uploading = true;
                     Intent intent = new Intent(getApplicationContext(), FilePicker.class);
                     startActivityForResult(intent, REQUEST_POSITIVE_FILE);
@@ -129,12 +125,10 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
         btn_negative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(negative_url!=null && !negative_url.equals("") && old_negative)
-                {
-                    Toast.makeText(context,"A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
+                if (negative_url != null && !negative_url.equals("") && old_negative) {
+                    Toast.makeText(context, "A file is already associated, if you want to change it please click again.", Toast.LENGTH_SHORT).show();
                     old_negative = false;
-                } else
-                {
+                } else {
                     negative_uploading = true;
                     Intent intent = new Intent(getApplicationContext(), FilePicker.class);
                     startActivityForResult(intent, REQUEST_NEGATIVE_FILE);
@@ -145,13 +139,12 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
 
         Button button1 = (Button) findViewById(R.id.qrcode);
-        Button share_button = (Button)findViewById(R.id.qr_share);
-        Button save_button = (Button)findViewById(R.id.qr_save);
+        Button share_button = (Button) findViewById(R.id.qr_share);
+        Button save_button = (Button) findViewById(R.id.qr_save);
         button1.setOnClickListener(this);
         share_button.setOnClickListener(this);
         save_button.setOnClickListener(this);
     }
-    private static final int SELECTED_PICTURE=1;
 
     public void onClick(View v) {
 
