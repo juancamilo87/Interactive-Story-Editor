@@ -194,20 +194,27 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
             // Save QR code to local db
             case R.id.qr_save:
-                if(verifyFields())
+                if(positive_uploading||negative_uploading)
                 {
-                    QRCodeInteraction interaction = new QRCodeInteraction(
-                            instructions,
-                            positive_feedback,
-                            negative_feedback,
-                            positive_url,
-                            negative_url,
-                            qr_message);
+                    Toast.makeText(getApplicationContext(),"Please wait till the files finish uploading",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if(verifyFields())
+                    {
+                        QRCodeInteraction interaction = new QRCodeInteraction(
+                                instructions,
+                                positive_feedback,
+                                negative_feedback,
+                                positive_url,
+                                negative_url,
+                                qr_message);
 
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("interaction", (Serializable) interaction);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("interaction", (Serializable) interaction);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
                 }
                 break;
         }

@@ -58,7 +58,6 @@ public class AddQuizInteraction extends Activity {
     private String neg_feed;
     private String positive_url;
     private String negative_url;
-    private int interaction_type;
 
     private boolean old_positive;
     private boolean old_negative;
@@ -71,6 +70,10 @@ public class AddQuizInteraction extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quiz_interaction);
+
+        context = this;
+        story_id = getIntent().getLongExtra("story_id",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number",-1);
 
         question_edt = (EditText) findViewById(R.id.question_edt);
         ans1_edt = (EditText) findViewById(R.id.answer1_edt);
@@ -105,7 +108,6 @@ public class AddQuizInteraction extends Activity {
             negative_feed_edt.setText(quizInteraction.getNegativeTextFeedback());
             positive_url = quizInteraction.getPositiveAudioFeedbackUrl();
             negative_url = quizInteraction.getNegativeAudioFeedbackUrl();
-            interaction_type = quizInteraction.getInteractionType();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -148,16 +150,23 @@ public class AddQuizInteraction extends Activity {
 
             @Override
             public void onClick(View view) {
-                if (verifyFields()) {
-                    QuizInteraction quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url,
-                            question, correct_ans, ans1, ans2, ans3, ans4);
+                if(positive_uploading||negative_uploading)
+                {
+                    Toast.makeText(getApplicationContext(),"Please wait till the files finish uploading",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if (verifyFields()) {
+                        QuizInteraction quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url,
+                                question, correct_ans, ans1, ans2, ans3, ans4);
 
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("interaction", (Serializable) quizInt);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("interaction", (Serializable) quizInt);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

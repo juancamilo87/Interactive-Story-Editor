@@ -136,21 +136,27 @@ public class AddNFCInteraction extends Activity {
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(verifyFields())
+                if(positive_uploading||negative_uploading)
                 {
-                    NFCInteraction interaction = new NFCInteraction(
-                            instructions,
-                            positive_feedback,
-                            negative_feedback,
-                            positive_url,
-                            negative_url,
-                            secret_message);
+                    Toast.makeText(getApplicationContext(),"Please wait till the files finish uploading",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if(verifyFields())
+                    {
+                        NFCInteraction interaction = new NFCInteraction(
+                                instructions,
+                                positive_feedback,
+                                negative_feedback,
+                                positive_url,
+                                negative_url,
+                                secret_message);
 
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("interaction", (Serializable) interaction);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("interaction", (Serializable) interaction);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
                 }
             }
         });

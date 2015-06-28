@@ -42,7 +42,6 @@ public class AddSpellCheckInteraction extends Activity {
     private String neg_feed;
     private String positive_url;
     private String negative_url;
-    private int interaction_type;
 
     private long story_id;
     private int chapter_number;
@@ -61,12 +60,16 @@ public class AddSpellCheckInteraction extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_spell_check_interaction);
 
+        context = this;
+        story_id = getIntent().getLongExtra("story_id",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number",-1);
+
         word_edt = (EditText) findViewById(R.id.spell_check_word_edt);
         instruct_edt = (EditText) findViewById(R.id.spell_check_instructions_edt);
         positive_feed_edt = (EditText) findViewById(R.id.spell_check_positive_feed_edt);
         negative_feed_edt = (EditText) findViewById(R.id.spell_check_negative_feed_edt);
         btn_positive= (ImageButton) findViewById(R.id.spell_check_btn_positive);
-        btn_negative = (ImageButton) findViewById(R.id.spell_check_btn_positive);
+        btn_negative = (ImageButton) findViewById(R.id.spell_check_btn_negative);
         btn_save = (Button) findViewById(R.id.spell_check_btn_save);
 
         old_positive = true;
@@ -84,7 +87,6 @@ public class AddSpellCheckInteraction extends Activity {
             negative_feed_edt.setText(spellCheckInteraction.getNegativeTextFeedback());
             positive_url = spellCheckInteraction.getPositiveAudioFeedbackUrl();
             negative_url = spellCheckInteraction.getNegativeAudioFeedbackUrl();
-            interaction_type = spellCheckInteraction.getInteractionType();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -127,15 +129,22 @@ public class AddSpellCheckInteraction extends Activity {
 
             @Override
             public void onClick(View view) {
-                if (verifyFields()) {
-                    SpellCheckInteraction spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word);
+                if(positive_uploading||negative_uploading)
+                {
+                    Toast.makeText(getApplicationContext(),"Please wait till the files finish uploading",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if (verifyFields()) {
+                        SpellCheckInteraction spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word);
 
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("quiz interaction", (Serializable) spCheckInt);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("interaction", (Serializable) spCheckInt);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

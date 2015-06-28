@@ -120,22 +120,28 @@ public class AddGPSInteraction extends Activity{
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(verifyFields())
+                if(positive_uploading||negative_uploading)
                 {
-                    GPSInteraction interaction = new GPSInteraction(
-                            instructions,
-                            positive_feedback,
-                            negative_feedback,
-                            positive_url,
-                            negative_url,
-                            (float)latitude,
-                            (float)longitude);
+                    Toast.makeText(getApplicationContext(),"Please wait till the files finish uploading",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if(verifyFields())
+                    {
+                        GPSInteraction interaction = new GPSInteraction(
+                                instructions,
+                                positive_feedback,
+                                negative_feedback,
+                                positive_url,
+                                negative_url,
+                                (float)latitude,
+                                (float)longitude);
 
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("interaction", (Serializable) interaction);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("interaction", (Serializable) interaction);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
                 }
             }
         });
