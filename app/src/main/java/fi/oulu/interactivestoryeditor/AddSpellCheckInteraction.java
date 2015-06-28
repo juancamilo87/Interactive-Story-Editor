@@ -229,7 +229,7 @@ public class AddSpellCheckInteraction extends Activity {
         }
     }
 
-    private void uploadFile(Intent data, String path, final int label) {
+    private void uploadFile(Intent data, final String path, final int label) {
         if(data.hasExtra(FilePicker.EXTRA_FILE_PATH)) {
 
             final File selectedFile = new File(data.getStringExtra(FilePicker.EXTRA_FILE_PATH));
@@ -244,23 +244,31 @@ public class AddSpellCheckInteraction extends Activity {
             if ( myFile.exists() ) {
                 RequestParams params = new RequestParams();
                 try {
-                    params.put("profile_picture", myFile, "application/octet-stream");
-                    params.put("url",path);
+                    params.put("file", myFile, RequestParams.APPLICATION_OCTET_STREAM);
+                    params.put("path",path);
+                    params.setContentEncoding("UTF-8");
+                    Log.d("Path", path);
+                    Log.d("File", selectedFile.getName());
                 } catch(FileNotFoundException e) {}
-
+                Log.d("params",params.toString());
                 // send request
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post("http://memoryhelper.netne.net/fileupload/upload.php", params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                        uploadResult(true, label, "http://memoryhelper.netne.net/fileupload/" + selectedFile.getPath());
-                    }
+                client.post(
+                        "http://memoryhelper.netne.net/interactivestory/index.php/fileupload/upload_file",
+                        params,
+                        new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                                Log.d("status",statusCode+"");
+                                Log.d("bytes",new String(bytes));
+                                uploadResult(true, label, "http://memoryhelper.netne.net/interactivestory/" + path + selectedFile.getName());
+                            }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-                        uploadResult(false,label,"");
-                    }
-                });
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                                uploadResult(false,label,"");
+                            }
+                        });
             } else {
                 uploadResult(false,label,"");
                 //Toast.makeText(getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
