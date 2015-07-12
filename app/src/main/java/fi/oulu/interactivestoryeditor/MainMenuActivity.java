@@ -68,7 +68,7 @@ public class MainMenuActivity extends Activity {
     private static final int ADD_STORY = 1;
     private static final int EDIT_STORY = 2;
 
-    private static final String postURL = "";
+    private static final String postURL = "http://memoryhelper.netne.net/interactivestory/index.php/stories/add_new_story";
 
     private ArrayAdapter<Story> adapter;
     private List<Story> stories;
