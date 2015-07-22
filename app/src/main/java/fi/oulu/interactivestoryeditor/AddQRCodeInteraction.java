@@ -54,6 +54,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
     private Context context;
     private long story_id;
     private int chapter_number;
+    private long interaction_id;
 
     private String instructions;
     private String positive_feedback;
@@ -79,6 +80,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
 
         story_id = getIntent().getLongExtra("story_id", -1);
         chapter_number = getIntent().getIntExtra("chapter_number", -1);
+        interaction_id = -1;
 
         context = this;
 
@@ -104,7 +106,7 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
             positive_url = interaction.getPositiveAudioFeedbackUrl();
             negative_url = interaction.getNegativeAudioFeedbackUrl();
             qrInput.setText(interaction.getSecretCode());
-
+            interaction_id = interaction.getInteraction_id();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -202,13 +204,28 @@ public class AddQRCodeInteraction extends Activity implements OnClickListener{
                 {
                     if(verifyFields())
                     {
-                        QRCodeInteraction interaction = new QRCodeInteraction(
-                                instructions,
-                                positive_feedback,
-                                negative_feedback,
-                                positive_url,
-                                negative_url,
-                                qr_message);
+                        QRCodeInteraction interaction;
+                        if(interaction_id != -1)
+                        {
+                            interaction = new QRCodeInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    qr_message,
+                                    interaction_id);
+                        }
+                        else
+                        {
+                            interaction = new QRCodeInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    qr_message);
+                        }
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("interaction", (Serializable) interaction);

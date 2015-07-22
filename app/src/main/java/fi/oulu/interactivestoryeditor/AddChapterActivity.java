@@ -61,6 +61,7 @@ public class AddChapterActivity extends Activity {
 
     private long story_id;
     private int chapter_number;
+    private long chapter_id;
 
     private boolean image_uploading;
     private boolean video_uploading;
@@ -101,13 +102,23 @@ public class AddChapterActivity extends Activity {
         old_video = true;
         old_audio = true;
 
+        chapter_id = -1;
+
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!image_uploading&&!video_uploading&&!audio_uploading)
                 {
                     if (verifyFields()) {
-                        Chapter chapter = new Chapter(title, content, image_url, video_url, audio_url);
+                        Chapter chapter;
+                        if(chapter_id!=-1)
+                        {
+                            chapter = new Chapter(title, content, image_url, video_url, audio_url, chapter_id);
+                        }
+                        else
+                        {
+                            chapter = new Chapter(title, content, image_url, video_url, audio_url);
+                        }
                         if (interaction != null) {
                             chapter.setInteraction(interaction);
                         }
@@ -140,6 +151,7 @@ public class AddChapterActivity extends Activity {
             video_url = chapter.getVideoUrl();
             audio_url = chapter.getAudioUrl();
             interaction = chapter.getInteraction();
+            chapter_id = chapter.getChapter_id();
             if(interaction != null)
             {
                 btn_add_interaction.setText("Edit Interaction");

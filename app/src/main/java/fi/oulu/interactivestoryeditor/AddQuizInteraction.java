@@ -34,7 +34,6 @@ public class AddQuizInteraction extends Activity {
     private EditText ans1_edt;
     private EditText ans2_edt;
     private EditText ans3_edt;
-    private EditText ans4_edt;
     private EditText correct_edt;
     private EditText instruct_edt;
     private EditText positive_feed_edt;
@@ -46,12 +45,12 @@ public class AddQuizInteraction extends Activity {
 
     private long story_id;
     private int chapter_number;
+    private long interaction_id;
 
     private String question;
     private String ans1;
     private String ans2;
     private String ans3;
-    private String ans4;
     private String correct_ans;
     private String instruct;
     private String pos_feed;
@@ -73,13 +72,13 @@ public class AddQuizInteraction extends Activity {
 
         context = this;
         story_id = getIntent().getLongExtra("story_id",-1);
-        chapter_number = getIntent().getIntExtra("chapter_number",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number", -1);
+        interaction_id = -1;
 
         question_edt = (EditText) findViewById(R.id.question_edt);
         ans1_edt = (EditText) findViewById(R.id.answer1_edt);
         ans2_edt = (EditText) findViewById(R.id.answer2_edt);
         ans3_edt = (EditText) findViewById(R.id.answer3_edt);
-        ans4_edt = (EditText) findViewById(R.id.answer4_edt);
         correct_edt = (EditText) findViewById(R.id.correct_ans_edt);
         instruct_edt = (EditText) findViewById(R.id.instructions_edt);
         positive_feed_edt = (EditText) findViewById(R.id.positive_feed_edt);
@@ -101,13 +100,13 @@ public class AddQuizInteraction extends Activity {
             ans1_edt.setText(quizInteraction.getAnswer1());
             ans2_edt.setText(quizInteraction.getAnswer2());
             ans3_edt.setText(quizInteraction.getAnswer3());
-            ans4_edt.setText(quizInteraction.getAnswer4());
             correct_edt.setText(quizInteraction.getCorrectAnswer());
             instruct_edt.setText(quizInteraction.getInstructions());
             positive_feed_edt.setText(quizInteraction.getPositiveTextFeedback());
             negative_feed_edt.setText(quizInteraction.getNegativeTextFeedback());
             positive_url = quizInteraction.getPositiveAudioFeedbackUrl();
             negative_url = quizInteraction.getNegativeAudioFeedbackUrl();
+            interaction_id = quizInteraction.getInteraction_id();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +156,17 @@ public class AddQuizInteraction extends Activity {
                 else
                 {
                     if (verifyFields()) {
-                        QuizInteraction quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url,
-                                question, correct_ans, ans1, ans2, ans3, ans4);
+                        QuizInteraction quizInt;
+                        if(interaction_id != -1)
+                        {
+                            quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url,
+                                    question, correct_ans, ans1, ans2, ans3, interaction_id);
+                        }
+                        else
+                        {
+                            quizInt = new QuizInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url,
+                                    question, correct_ans, ans1, ans2, ans3);
+                        }
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("interaction", (Serializable) quizInt);
@@ -209,15 +217,6 @@ public class AddQuizInteraction extends Activity {
         if(!ans3_edt.getText().toString().trim().equals(""))
         {
             ans3 = ans3_edt.getText().toString().trim();
-        }
-        else
-        {
-            return false;
-        }
-
-        if(!ans4_edt.getText().toString().trim().equals(""))
-        {
-            ans4 = ans4_edt.getText().toString().trim();
         }
         else
         {

@@ -54,6 +54,7 @@ public class AddGPSInteraction extends Activity{
 
     private long story_id;
     private int chapter_number;
+    private long interaction_id;
 
     private String instructions;
     private String positive_feedback;
@@ -76,6 +77,7 @@ public class AddGPSInteraction extends Activity{
         tv_longitude = (TextView)  findViewById(R.id.tv_longitude);
         pick_location_btn = (Button) findViewById(R.id.gps_pick_location);
 
+        interaction_id = -1;
         story_id = getIntent().getLongExtra("story_id",-1);
         chapter_number = getIntent().getIntExtra("chapter_number",-1);
 
@@ -99,6 +101,7 @@ public class AddGPSInteraction extends Activity{
             negative_url = interaction.getNegativeAudioFeedbackUrl();
             latitude = interaction.getLatitude();
             longitude = interaction.getLongitude();
+            interaction_id = interaction.getInteraction_id();
 
             tv_latitude.setText((double) Math.round(latitude * 100000) / 100000 + "");
             tv_longitude.setText((double) Math.round(longitude * 100000) / 100000 + "");
@@ -128,14 +131,30 @@ public class AddGPSInteraction extends Activity{
                 {
                     if(verifyFields())
                     {
-                        GPSInteraction interaction = new GPSInteraction(
-                                instructions,
-                                positive_feedback,
-                                negative_feedback,
-                                positive_url,
-                                negative_url,
-                                (float)latitude,
-                                (float)longitude);
+                        GPSInteraction interaction;
+                        if(interaction_id != -1)
+                        {
+                            interaction = new GPSInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    (float)latitude,
+                                    (float)longitude,
+                                    interaction_id);
+                        }
+                        else
+                        {
+                            interaction = new GPSInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    (float)latitude,
+                                    (float)longitude);
+                        }
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("interaction", (Serializable) interaction);

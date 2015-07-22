@@ -45,6 +45,7 @@ public class AddSpellCheckInteraction extends Activity {
 
     private long story_id;
     private int chapter_number;
+    private long interaction_id;
 
     private boolean old_positive;
     private boolean old_negative;
@@ -62,7 +63,8 @@ public class AddSpellCheckInteraction extends Activity {
 
         context = this;
         story_id = getIntent().getLongExtra("story_id",-1);
-        chapter_number = getIntent().getIntExtra("chapter_number",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number", -1);
+        interaction_id = -1;
 
         word_edt = (EditText) findViewById(R.id.spell_check_word_edt);
         instruct_edt = (EditText) findViewById(R.id.spell_check_instructions_edt);
@@ -87,6 +89,7 @@ public class AddSpellCheckInteraction extends Activity {
             negative_feed_edt.setText(spellCheckInteraction.getNegativeTextFeedback());
             positive_url = spellCheckInteraction.getPositiveAudioFeedbackUrl();
             negative_url = spellCheckInteraction.getNegativeAudioFeedbackUrl();
+            interaction_id = spellCheckInteraction.getInteraction_id();
         }
 
         btn_positive.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +139,15 @@ public class AddSpellCheckInteraction extends Activity {
                 else
                 {
                     if (verifyFields()) {
-                        SpellCheckInteraction spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word);
+                        SpellCheckInteraction spCheckInt;
+                        if(interaction_id != -1)
+                        {
+                            spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word, interaction_id);
+                        }
+                        else
+                        {
+                            spCheckInt = new SpellCheckInteraction(instruct, pos_feed, neg_feed, positive_url, negative_url, word);
+                        }
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("interaction", (Serializable) spCheckInt);

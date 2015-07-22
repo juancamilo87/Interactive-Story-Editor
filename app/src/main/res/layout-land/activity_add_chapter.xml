@@ -130,6 +130,7 @@
         android:textSize="20sp"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
+        android:gravity="top"
         />
 
 </LinearLayout>

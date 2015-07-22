@@ -16,7 +16,6 @@
         />
         <Button
             android:id="@+id/story_list_btn_add_story"
-            android:text="Save"
             style="@style/PlusButton"
         />
     </RelativeLayout>

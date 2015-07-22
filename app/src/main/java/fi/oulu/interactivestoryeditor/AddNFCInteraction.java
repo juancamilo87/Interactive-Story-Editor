@@ -67,6 +67,7 @@ public class AddNFCInteraction extends Activity {
 
     private long story_id;
     private int chapter_number;
+    private long interaction_id;
 
     private String instructions;
     private String positive_feedback;
@@ -91,7 +92,8 @@ public class AddNFCInteraction extends Activity {
         setContentView(R.layout.activity_add_nfc_interaction);
 
         story_id = getIntent().getLongExtra("story_id",-1);
-        chapter_number = getIntent().getIntExtra("chapter_number",-1);
+        chapter_number = getIntent().getIntExtra("chapter_number", -1);
+        interaction_id = -1;
 
         context = this;
 
@@ -130,7 +132,7 @@ public class AddNFCInteraction extends Activity {
             positive_url = interaction.getPositiveAudioFeedbackUrl();
             negative_url = interaction.getNegativeAudioFeedbackUrl();
             edt_secret.setText(interaction.getSecretCode());
-
+            interaction_id = interaction.getInteraction_id();
         }
 
         save_button.setOnClickListener(new View.OnClickListener() {
@@ -144,13 +146,28 @@ public class AddNFCInteraction extends Activity {
                 {
                     if(verifyFields())
                     {
-                        NFCInteraction interaction = new NFCInteraction(
-                                instructions,
-                                positive_feedback,
-                                negative_feedback,
-                                positive_url,
-                                negative_url,
-                                secret_message);
+                        NFCInteraction interaction;
+                        if(interaction_id!= -1)
+                        {
+                            interaction = new NFCInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    secret_message,
+                                    interaction_id);
+                        }
+                        else
+                        {
+                            interaction = new NFCInteraction(
+                                    instructions,
+                                    positive_feedback,
+                                    negative_feedback,
+                                    positive_url,
+                                    negative_url,
+                                    secret_message);
+                        }
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("interaction", (Serializable) interaction);

@@ -31,8 +31,10 @@ import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
@@ -40,6 +42,7 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -313,7 +316,6 @@ public class MainMenuActivity extends Activity {
                                 interactionJson.put("answer_1",((QuizInteraction)interaction).getAnswer1());
                                 interactionJson.put("answer_2",((QuizInteraction)interaction).getAnswer2());
                                 interactionJson.put("answer_3",((QuizInteraction)interaction).getAnswer3());
-                                interactionJson.put("answer_4",((QuizInteraction)interaction).getAnswer4());
                                 break;
                             case Interaction.SPELL_INTERACTION:
                                 interactionJson.put("word",((SpellCheckInteraction)interaction).getWord());
@@ -338,11 +340,14 @@ public class MainMenuActivity extends Activity {
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost(URL);
 
+
             try
             {
-                AbstractHttpEntity entity = new ByteArrayEntity(json.toString().getBytes("UTF8"));
-                entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                request.setEntity(entity);
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+
+                nameValuePairs.add(new BasicNameValuePair("data", json.toString()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = client.execute(request);
 
                 StatusLine statusLine = response.getStatusLine();

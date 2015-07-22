@@ -109,7 +109,8 @@ public class ChaptersDataSource {
             values.put(MySQLiteHelper.COLUMN_CHAPTERS_AUDIO_URL, chapter.getAudioUrl());
             Cursor cursor = database.query(MySQLiteHelper.TABLE_CHAPTERS,
                     allColumns, MySQLiteHelper.COLUMN_CHAPTERS_STORY_ID + " = " + story_id + " AND " +
-                            MySQLiteHelper.COLUMN_CHAPTERS_NUMBER + " = " + number, null,
+                            MySQLiteHelper.COLUMN_CHAPTERS_NUMBER + " = " + number + " AND " +
+                    MySQLiteHelper.COLUMN_CHAPTERS_ID + " != " + chapter.getChapter_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -122,9 +123,19 @@ public class ChaptersDataSource {
                     deleteChapter(deleteId);
                 }
             }
+            Cursor check_cursor = database.query(MySQLiteHelper.TABLE_CHAPTERS,
+                    allColumns, MySQLiteHelper.COLUMN_CHAPTERS_ID + " = " + chapter.getChapter_id(), null,
+                    null, null, null);
+            if(check_cursor.moveToFirst())
+            {
+                String strFilter = MySQLiteHelper.COLUMN_CHAPTERS_ID + "=" + chapter.getChapter_id();
+                database.update(MySQLiteHelper.TABLE_CHAPTERS, values, strFilter, null);
+            }
+            else
+            {
+                long insertId = database.insert(MySQLiteHelper.TABLE_CHAPTERS, null, values);
+            }
 
-            String strFilter = MySQLiteHelper.COLUMN_CHAPTERS_ID + "=" + chapter.getChapter_id();
-            database.update(MySQLiteHelper.TABLE_CHAPTERS, values, strFilter, null);
 
             Interaction interaction = null;
 

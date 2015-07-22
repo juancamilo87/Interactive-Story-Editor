@@ -195,7 +195,8 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_LONGITUDE, interaction.getLongitude());
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id, null,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id+ " AND "+
+                            MySQLiteHelper.COLUMN_INTERACTIONS_ID + " != " + interaction.getInteraction_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -280,7 +281,8 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_SECRET_CODE, interaction.getSecretCode());
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id, null,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id+ " AND "+
+                            MySQLiteHelper.COLUMN_INTERACTIONS_ID + " != " + interaction.getInteraction_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -294,8 +296,19 @@ public class InteractionsDataSource {
                 }
             }
 
-            String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            Cursor check_cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null,
+                    null, null, null);
+            if(check_cursor.moveToFirst())
+            {
+                String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
+                database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            }
+            else
+            {
+                long insertId = database.insert(MySQLiteHelper.TABLE_INTERACTIONS, null, values);
+            }
+
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
@@ -365,7 +378,8 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_SECRET_CODE, interaction.getSecretCode());
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id, null,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id+ " AND "+
+                            MySQLiteHelper.COLUMN_INTERACTIONS_ID + " != " + interaction.getInteraction_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -379,8 +393,18 @@ public class InteractionsDataSource {
                 }
             }
 
-            String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            Cursor check_cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null,
+                    null, null, null);
+            if(check_cursor.moveToFirst())
+            {
+                String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
+                database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            }
+            else
+            {
+                long insertId = database.insert(MySQLiteHelper.TABLE_INTERACTIONS, null, values);
+            }
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
@@ -412,7 +436,6 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_1, interaction.getAnswer1());
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_2, interaction.getAnswer2());
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_3, interaction.getAnswer3());
-            values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_4, interaction.getAnswer4());
 
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
@@ -457,10 +480,10 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_1, interaction.getAnswer1());
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_2, interaction.getAnswer2());
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_3, interaction.getAnswer3());
-            values.put(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_4, interaction.getAnswer4());
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id, null,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id+ " AND "+
+                            MySQLiteHelper.COLUMN_INTERACTIONS_ID + " != " + interaction.getInteraction_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -474,8 +497,18 @@ public class InteractionsDataSource {
                 }
             }
 
-            String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            Cursor check_cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null,
+                    null, null, null);
+            if(check_cursor.moveToFirst())
+            {
+                String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
+                database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            }
+            else
+            {
+                long insertId = database.insert(MySQLiteHelper.TABLE_INTERACTIONS, null, values);
+            }
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
@@ -544,7 +577,8 @@ public class InteractionsDataSource {
             values.put(MySQLiteHelper.COLUMN_INTERACTIONS_WORD, interaction.getWord());
 
             Cursor cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
-                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id, null,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_CHAPTER_ID + " = " + chapter_id+ " AND "+
+                            MySQLiteHelper.COLUMN_INTERACTIONS_ID + " != " + interaction.getInteraction_id(), null,
                     null, null, null);
 
             if(cursor.moveToFirst())
@@ -558,8 +592,18 @@ public class InteractionsDataSource {
                 }
             }
 
-            String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
-            database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            Cursor check_cursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
+                    allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null,
+                    null, null, null);
+            if(check_cursor.moveToFirst())
+            {
+                String strFilter = MySQLiteHelper.COLUMN_INTERACTIONS_ID + "=" + interaction.getInteraction_id();
+                database.update(MySQLiteHelper.TABLE_INTERACTIONS, values, strFilter, null);
+            }
+            else
+            {
+                long insertId = database.insert(MySQLiteHelper.TABLE_INTERACTIONS, null, values);
+            }
 
             Cursor otherCursor = database.query(MySQLiteHelper.TABLE_INTERACTIONS,
                     allColumns, MySQLiteHelper.COLUMN_INTERACTIONS_ID + " = " + interaction.getInteraction_id(), null, null, null, null);
@@ -772,9 +816,8 @@ public class InteractionsDataSource {
         String answer_1 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_1));
         String answer_2 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_2));
         String answer_3 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_3));
-        String answer_4 = cursor.getString(cursor.getColumnIndex(MySQLiteHelper.COLUMN_INTERACTIONS_ANSWER_4));
 
-        QuizInteraction interaction = new QuizInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, question, correct_answer, answer_1, answer_2, answer_3, answer_4, id);
+        QuizInteraction interaction = new QuizInteraction(instructions, positive_feedback, negative_feedback, positive_url, negative_url, question, correct_answer, answer_1, answer_2, answer_3, id);
         return interaction;
     }
 
