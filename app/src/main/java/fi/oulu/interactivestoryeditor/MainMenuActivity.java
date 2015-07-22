@@ -302,7 +302,7 @@ public class MainMenuActivity extends Activity {
                         {
                             case Interaction.GPS_INTERACTION:
                                 interactionJson.put("latitude",((GPSInteraction)interaction).getLatitude());
-                                interactionJson.put("longitude",((GPSInteraction)interaction).getLatitude());
+                                interactionJson.put("longitude",((GPSInteraction)interaction).getLongitude());
                                 break;
                             case Interaction.NFC_INTERACTION:
                                 interactionJson.put("secret_code",((NFCInteraction)interaction).getSecretCode());
